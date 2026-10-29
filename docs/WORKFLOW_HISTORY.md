@@ -60,7 +60,7 @@ software foundation, while clinical feasibility remained completely open.
 
 ## Increment 01 — source-only dataset audit tooling
 
-**Generated 30 October 2026 · Documented project stage 01 · Commit recorded in Git history**
+**Generated 30 October 2026 · Code commit `29b59af` · Documented project stage 01**
 
 The next increment addresses the first research gate without bringing restricted
 records into the coding environment. We added an offline DuckDB audit program
@@ -105,10 +105,10 @@ the G1 clinical policies before Stage 02 can start.
 | Document version | Generated (Asia/Kolkata) | Project increment | What changed |
 | --- | --- | --- | --- |
 | 1.0 | 30 October 2026 | Stage 00, commit `6d17cae` | First synthetic app, local API, tests, repository safeguards and README. |
-| 1.1 | 30 October 2026 | Stage 01, commit in Git history | Offline aggregate audit CLI, synthetic tests, human G1 templates, runbook and updated README. |
+| 1.1 | 30 October 2026 | Stage 01, commit `29b59af` | Offline aggregate audit CLI, synthetic tests, human G1 templates, runbook and updated README. |
 
 For each future increment, add a new narrative section and a dated row here.
 Explain the reason for any changed design, cite the tests actually run, and
 state the next research or engineering gate. Record its commit hash once known
-in Git history or a subsequent document update. Do not treat an implementation
+in a subsequent document update. Do not treat an implementation
 stage as scientific validation merely because its code is complete.
