@@ -31,7 +31,7 @@ Build a reproducible, privacy-respecting, full-stack *research prototype* for pr
 2. Implement **only** the requested phase. Don't proceed across failed gates.
 3. Use synthetic test fixtures only.
 4. Run relevant checks (Python tests, frontend tests/build, lints, privacy scan); accurately report commands/results and unrun checks.
-5. Update `docs/decision_log.md`, `docs/clinical_protocol.md` where relevant, and code documentation.
+5. Update `docs/decision_log.md`, `docs/clinical_protocol.md` where relevant, and code documentation. Also update `docs/WORKFLOW_HISTORY.md` after every increment: add a readable narrative of what changed, why, checks run, limits and next gate, plus a dated version-history row.
 6. End each task with: `Files changed`, `Tests run/results`, `Gate status`, `Assumptions requiring human approval`, `Next step`.
 7. Do not modify Git remotes, publish, push, install global packages, perform destructive operations, or access protected folders without explicit user approval.
 

@@ -20,3 +20,9 @@ These checks are heuristic; ignored files are not inspected, generic PHI is not
 detectable reliably, and no automatic scan certifies a repository safe to publish.
 The history check audits reachable refs, not reflogs, dangling objects, or other
 clones. Disclosure review remains mandatory before any research output release.
+
+Stage 01's `scripts/dataset_audit.py` is for authorized execution in a separate
+private environment. Its manifest and output must remain outside this checkout
+and every agent-readable path. The CLI suppresses small cells, buckets larger
+counts, and withholds source paths and original IDs, but its output still needs
+manual disclosure review. CI runs it only on temporary invented fixtures.

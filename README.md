@@ -4,9 +4,13 @@ A local research prototype for studying adult ICU **Stage 1 AKI progression to
 Stage 2/3 within 48 hours**, with planned MIMIC-IV development and harmonized eICU
 external evaluation. This is an educational research project, not a clinical tool.
 
-**Current increment: Stage 00 — synthetic application foundation.** No clinical
-labeling, training, prediction, or evaluation has been performed. The API and UI
-explicitly report **Model unavailable** and **Not yet evaluated**.
+**Current increment: Stage 01 — offline dataset audit tooling.** Stage 00's
+synthetic application foundation remains available. No clinical labeling,
+training, prediction, or evaluation has been performed. The API and UI explicitly
+report **Model unavailable** and **Not yet evaluated**.
+
+Start with the [project story and version history](docs/WORKFLOW_HISTORY.md)
+for a readable account of every completed increment and why it was built.
 
 ## What works
 
@@ -19,6 +23,11 @@ explicitly report **Model unavailable** and **Not yet evaluated**.
 - Python tests, UI interaction tests, frontend lint/type/build checks, synthetic-only
   CI, and source/staged/history file and secret safeguards.
 - Modular `ml/` placeholders and the original implementation package under `docs/`.
+- A DuckDB-based offline audit CLI for explicitly listed MIMIC-IV/eICU CSV or
+  compressed CSV tables. It inventories candidate schemas, count buckets,
+  missingness, creatinine/unit patterns, timestamps, linkage, pre-ICU and early
+  post-admission observations, optional dialysis signals, and hospital coverage.
+  It produces no clinical labels and has run only on invented temporary fixtures.
 
 ## Run locally
 
@@ -51,6 +60,23 @@ Open **http://127.0.0.1:5173**. The frontend proxies `/api` to
 http://127.0.0.1:8000/docs. No environment file, dataset, GPU or model is required.
 The `.env.example` documents the supported mode; `.env` loading is not enabled.
 
+## Stage 01 audit handoff
+
+**G1 BLOCKED PENDING AUTHORIZED HUMAN-RUN AGGREGATE AUDIT.** The audit requires
+credentialed files and must run separately in an isolated research environment.
+Codex has not inspected or processed those files. The [runbook](docs/offline_audit_runbook.md)
+shows the private manifest format, setup, `--dry-run`, and actual offline command.
+The [audit template](docs/dataset_audit_template.md) and
+[G1 decision template](docs/G1_Decision_Template.md) list the evidence and
+human-reviewed decisions needed before Stage 02. Do not put a private manifest,
+audit output, patient data, or reviewed source paths in the repository.
+
+The CLI writes aggregate JSON and Markdown to an explicitly supplied private
+directory. Counts below the configured minimum are suppressed; larger counts
+are bucketed. Its candidate mappings and text searches are **unverified**.
+An authorized reviewer must still check every aggregate for disclosure risk
+before sharing it.
+
 ## Check the increment
 
 ```bash
@@ -77,9 +103,10 @@ review and filesystem isolation are still required.
 | --- | --- |
 | `backend/app/` | FastAPI app, response contracts and invented demo cases |
 | `frontend/` | React shell, Tailwind and locally owned UI primitive |
-| `ml/` | Empty clinical/ingestion/features/training/evaluation/reliability modules |
+| `ml/ingestion/` | Offline source schema candidates and aggregate audit program |
+| `ml/clinical/`, `ml/features/`, `ml/training/`, `ml/evaluation/` | Pending later gates |
 | `tests/` | Synthetic API and repository safeguard tests |
-| `scripts/` | Source-only repository checks |
+| `scripts/` | Source-only repository checks and offline audit CLI |
 | `docs/` | Specification, decisions, governance, architecture and staged prompts |
 
 The shadcn configuration and a native accessible button are included; a full
@@ -87,10 +114,10 @@ component library and clinical dashboard belong to later stages.
 
 ## Research gates and next part
 
-Stage 00 is limited to the software foundation. See
+Stage 01 adds the source-only feasibility audit. See
 [the decision log](docs/decision_log.md) for validation evidence and limitations.
-The next increment is [Prompt 01 — dataset audit tools](docs/prompts/01_dataset_audit.md).
-It creates source-only tools for an authorized researcher to run separately.
+The next engineering increment is [Prompt 02 — clinical engine](docs/prompts/02_kdigo_clinical_engine.md),
+which requires the G1 decisions to be reviewed and frozen first.
 
 **G1 remains pending.** Dataset versions, baseline creatinine, eligibility,
 result-availability timing, adequate negative-outcome follow-up/competing events,

@@ -2,9 +2,13 @@
 
 Version: draft-0. No clinical labels or training authorized by this document.
 
+Stage 01 provides offline inventory code only. Its ICU-admission timing patterns
+are descriptive and cannot establish a Stage 1 index, negative follow-up adequacy,
+or comparable external labels. See `G1_Decision_Template.md` for the reviewer form.
+
 Approved study objective: adult ICU, first confirmed creatinine-based Stage 1
 assessment, progression to creatinine-based Stage 2/3 within 48 hours. The clinical
-engine is not implemented in Stage 00. Exact clinical criteria must be independently
+engine has not yet been implemented. Exact clinical criteria must be independently
 checked against primary guidance in its implementation stage.
 
 | Decision | Status |

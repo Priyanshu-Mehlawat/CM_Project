@@ -39,5 +39,38 @@ CI is configured but no remote run is claimed. G1 through G9 remain pending.
 Assumptions requiring human approval: all G1 clinical/data policies listed in
 `clinical_protocol.md`; no defaults have been invented for them.
 
-Next part: Prompt 01 source-only audit tooling, after review of this increment.
-Stop here per the user's instruction to work and push in parts.
+Next part at that time: Prompt 01 source-only audit tooling. The user later
+requested the next roughly 10% increment and authorized its commit and push.
+
+## 2026-10-30 — Stage 01 source-only audit increment
+
+Scope: Prompt 01's offline feasibility inventory and human decision templates.
+The user asked for roughly one additional tenth of the project, a README update,
+an appropriate commit, and a GitHub push. No real MIMIC-IV, eICU or SafeICU
+data was read, enumerated, downloaded, or used by Codex. All tests use
+independently authored temporary CSV fixtures.
+
+- Explicit table-path manifest; no dataset path defaults or directory scanning.
+- DuckDB inventory of candidate schema/types, count buckets, missingness,
+  creatinine text/unit/numeric patterns, timestamps, linkage, ICU-admission
+  observation patterns, dialysis text candidates and eICU hospital coverage.
+- G1 templates and isolated researcher runbook provided. Source names and
+  clinical concepts still require verification against actual versions.
+- CLI report withholds raw paths, IDs, dates, free text and row values, suppresses
+  cells below minimum 11, buckets larger counts and writes owner-only files
+  outside the source checkout. This is a heuristic disclosure barrier; a human
+  must review combined aggregates before any result is shared.
+- No baseline method, Stage 1 index, negative follow-up rule, cohort flow,
+  outcome label, conversion or cross-dataset comparability decision was inferred.
+
+Validation: 28 Python tests passed; 4 frontend tests passed; Ruff and ESLint
+passed; TypeScript check and Vite build passed; worktree and reachable-history
+heuristic scans passed. `--help` and `--dry-run` worked without touching a
+manifest. One pre-existing Starlette TestClient deprecation warning remains.
+No private-data execution, independent browser review or remote CI result is
+claimed. The staged-file scan runs before the commit.
+
+**Gate G1: BLOCKED PENDING AUTHORIZED HUMAN-RUN AGGREGATE AUDIT.** Stage 01 code
+is ready for isolated researcher use; G1 scientific acceptance is not achieved.
+All policies in `G1_Decision_Template.md` require human review and approval.
+Next engineering stage is Prompt 02 only after those decisions are frozen.
