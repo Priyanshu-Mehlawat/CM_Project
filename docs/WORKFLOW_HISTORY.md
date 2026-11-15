@@ -171,3 +171,8 @@ claimed. Those limits are explicit in the application, README and presentation.
 | Document entry | Generated | What changed |
 | --- | --- | --- |
 | 1.2 | 15 November 2026 | Repaired integrated software 0.2.0; canonical progression contract, replay, tests and cleanup; presentation 3.1 with nine confirmed design contributions. |
+
+The feature release was pushed as `0dc7e04`. GitHub Actions run 43682902343
+failed before starting any step because GitHub reported an account billing lock.
+The code was verified locally; no remote success is claimed. A documentation-only
+follow-up records that external blocker and the feature commit for traceability.

@@ -109,3 +109,8 @@ G0 software checks pass for this increment. G1 still requires actual isolated da
 feasibility and clinical-policy decisions; no real labels/training/evaluation were
 performed. Synthetic engine tests do not imply G2–G9 scientific completion. The
 user's authorization is not represented as supervisor or clinical approval.
+
+Publication: feature commit `0dc7e04` pushed to `main`. GitHub Actions run
+43682902343 did not start any steps; annotation says the account is locked due
+to a billing issue. Local gates passed. Remote CI remains unexecuted; no
+billing/account changes were attempted.

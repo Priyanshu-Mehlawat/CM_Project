@@ -26,7 +26,11 @@ not changed. Frontend lockfile includes a targeted patched minimatch override fo
 lint tooling; lint and application gates were repeated successfully after it.
 
 The committed CI workflow repeats contracts, lint, tests/build/privacy, localhost
-smoke and Chromium E2E on synthetic inputs. No remote CI run is claimed here.
+smoke and Chromium E2E on synthetic inputs. Remote CI for feature commit `0dc7e04` was submitted but no runner or test step
+started: GitHub reported that the account is locked due to a billing issue.
+The failed run is https://github.com/Priyanshu-Mehlawat/CM_Project/actions/runs/43682902343.
+This is not a remote test failure; local checks above passed. Account billing
+resolution is outside this software change; remote success is not claimed.
 `make contract` checks that Pydantic-generated types/runtime schemas and synthetic
 fixtures match the tracked frontend outputs.
 
