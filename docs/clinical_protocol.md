@@ -31,3 +31,22 @@ version and sensitivity plan for each decision before G2 begins.
 Synthetic regressions cover delayed results, retracted corrections, ≥4.0 mg/dL
 after ratio-defined AKI, expired reference windows and exact 48-hour endpoints.
 Real-data availability latency and negative ascertainment remain unresolved.
+
+
+## 15 November 2026 · 0.3.0 measurement-import implementation
+
+The user confirms authorized MIMIC/eICU access and local training availability.
+This confirms access, not dataset feasibility, clinical signoff or model validity.
+New transient assessments require an operator-supplied reference with collection
+and availability times plus explicit eligibility confirmation. These are input
+assertions, not an automated baseline-selection or cohort-approval algorithm.
+
+Supported assessment uses the tested creatinine branch, with 88.4 umol/L per mg/dL.
+First eligible Stage 1 index is determined by available results; earlier severe
+stages exclude model use. Model features are frozen at index; optional labs/vitals
+use the preceding 24h window. Duplicate/corrected samples require resolution before
+import. Age is restricted to adults, matching the study population. More than four
+missing model features withholds inference; this is an engineering coverage rule,
+not a validated clinical decision threshold. No alert/treatment threshold is set.
+Current stage/trend is separate from future probability; unknown outcomes are not
+assigned from an uploaded history. No real cohort labels or training were generated.

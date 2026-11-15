@@ -4,11 +4,16 @@ export type ClinicalAssessment = { stage: number | null; observed_aki: boolean; 
 export type Outcome = { state: "progressed" | "non_progressed" | "unknown"; reason: string; event_hour: number | null; followup_note: string };
 export type Prediction = { state?: "unavailable"; probability?: null; reason?: string; model_version?: null };
 export type TimelinePoint = { sample_id: string; measured_hour: number; available_hour: number; creatinine_mg_dl: number };
-export type Health = { schema_version?: "v1"; service_alive?: boolean; model_available?: false; mode?: "synthetic_demo" };
-export type SystemInfo = { schema_version?: "v1"; name?: string; version?: string; mode?: "synthetic_demo"; research_mode_enabled?: false; model_available?: false; model_version?: null; evaluation_state?: "not_yet_evaluated"; protocol_state?: "pending_G1" };
+export type Contribution = { feature: string; log_odds_contribution: number };
+export type PatientForecast = { state: "available" | "withheld" | "model_required"; probability: number | null; model_version: string | null; reason: string; calibration: "not_calibrated"; contributions: Array<Contribution> };
+export type PatientTimelinePoint = { measured_hour: number; creatinine_mg_dl: number };
+export type Health = { schema_version?: "v1"; service_alive?: boolean; model_available?: boolean; mode?: "synthetic_demo" };
+export type SystemInfo = { schema_version?: "v1"; name?: string; version?: string; mode?: "synthetic_demo"; research_mode_enabled?: false; model_available?: boolean; model_version?: string | null; evaluation_state?: "not_yet_evaluated"; protocol_state?: "pending_G1" };
 export type EpisodeList = { schema_version?: "v1"; episodes: Array<EpisodeSummary>; source?: "independently_authored_synthetic" };
 export type EpisodeView = { schema_version?: "v1"; id: string; name: string; description: string; source: "independently_authored_synthetic"; cutoff_hour: number; index_hour: number | null; horizon_hours: 48; protocol_version: string; assessment: ClinicalAssessment; timeline: Array<TimelinePoint>; outcome: Outcome; prediction: Prediction };
 export type ResearchStatus = { schema_version?: "v1"; state?: "not_yet_evaluated"; metrics?: null; protocol_state?: "pending_G1"; reason?: string };
+export type PatientAssessment = { schema_version?: "v1"; source: "synthetic" | "authorized_research"; stage: number | null; trend: string; latest_creatinine_mg_dl: number; change_mg_dl: number | null; index_hour: number | null; horizon_hours: 48; feature_version: string; features: Record<string, number | null> | null; missing_features: Array<string>; warnings: Array<string>; prediction: PatientForecast; timeline: Array<PatientTimelinePoint> };
+export type ModelStatus = { schema_version?: "v1"; state: "ready" | "not_configured"; model_version: string | null; protocol_version: string | null; calibration: string | null; target?: string; metrics: Record<string, Record<string, number>> | null; patient_import_enabled: boolean };
 export const contractSchemas = {
   "Health": {
     "additionalProperties": false,
@@ -25,7 +30,6 @@ export const contractSchemas = {
         "type": "boolean"
       },
       "model_available": {
-        "const": false,
         "default": false,
         "title": "Model Available",
         "type": "boolean"
@@ -55,7 +59,7 @@ export const contractSchemas = {
         "type": "string"
       },
       "version": {
-        "default": "0.2.0",
+        "default": "0.3.0",
         "title": "Version",
         "type": "string"
       },
@@ -72,15 +76,21 @@ export const contractSchemas = {
         "type": "boolean"
       },
       "model_available": {
-        "const": false,
         "default": false,
         "title": "Model Available",
         "type": "boolean"
       },
       "model_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
         "default": null,
-        "title": "Model Version",
-        "type": "null"
+        "title": "Model Version"
       },
       "evaluation_state": {
         "const": "not_yet_evaluated",
@@ -457,6 +467,324 @@ export const contractSchemas = {
       }
     },
     "title": "ResearchStatus",
+    "type": "object"
+  },
+  "PatientAssessment": {
+    "$defs": {
+      "Contribution": {
+        "properties": {
+          "feature": {
+            "title": "Feature",
+            "type": "string"
+          },
+          "log_odds_contribution": {
+            "title": "Log Odds Contribution",
+            "type": "number"
+          }
+        },
+        "required": [
+          "feature",
+          "log_odds_contribution"
+        ],
+        "title": "Contribution",
+        "type": "object"
+      },
+      "PatientForecast": {
+        "properties": {
+          "state": {
+            "enum": [
+              "available",
+              "withheld",
+              "model_required"
+            ],
+            "title": "State",
+            "type": "string"
+          },
+          "probability": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Probability"
+          },
+          "model_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Model Version"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "calibration": {
+            "const": "not_calibrated",
+            "title": "Calibration",
+            "type": "string"
+          },
+          "contributions": {
+            "items": {
+              "$ref": "#/$defs/Contribution"
+            },
+            "title": "Contributions",
+            "type": "array"
+          }
+        },
+        "required": [
+          "state",
+          "probability",
+          "model_version",
+          "reason",
+          "calibration",
+          "contributions"
+        ],
+        "title": "PatientForecast",
+        "type": "object"
+      },
+      "PatientTimelinePoint": {
+        "properties": {
+          "measured_hour": {
+            "title": "Measured Hour",
+            "type": "number"
+          },
+          "creatinine_mg_dl": {
+            "title": "Creatinine Mg Dl",
+            "type": "number"
+          }
+        },
+        "required": [
+          "measured_hour",
+          "creatinine_mg_dl"
+        ],
+        "title": "PatientTimelinePoint",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "v1",
+        "default": "v1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "source": {
+        "enum": [
+          "synthetic",
+          "authorized_research"
+        ],
+        "title": "Source",
+        "type": "string"
+      },
+      "stage": {
+        "anyOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Stage"
+      },
+      "trend": {
+        "title": "Trend",
+        "type": "string"
+      },
+      "latest_creatinine_mg_dl": {
+        "title": "Latest Creatinine Mg Dl",
+        "type": "number"
+      },
+      "change_mg_dl": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Change Mg Dl"
+      },
+      "index_hour": {
+        "anyOf": [
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Index Hour"
+      },
+      "horizon_hours": {
+        "const": 48,
+        "title": "Horizon Hours",
+        "type": "integer"
+      },
+      "feature_version": {
+        "title": "Feature Version",
+        "type": "string"
+      },
+      "features": {
+        "anyOf": [
+          {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Features"
+      },
+      "missing_features": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Missing Features",
+        "type": "array"
+      },
+      "warnings": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Warnings",
+        "type": "array"
+      },
+      "prediction": {
+        "$ref": "#/$defs/PatientForecast"
+      },
+      "timeline": {
+        "items": {
+          "$ref": "#/$defs/PatientTimelinePoint"
+        },
+        "title": "Timeline",
+        "type": "array"
+      }
+    },
+    "required": [
+      "source",
+      "stage",
+      "trend",
+      "latest_creatinine_mg_dl",
+      "change_mg_dl",
+      "index_hour",
+      "horizon_hours",
+      "feature_version",
+      "features",
+      "missing_features",
+      "warnings",
+      "prediction",
+      "timeline"
+    ],
+    "title": "PatientAssessment",
+    "type": "object"
+  },
+  "ModelStatus": {
+    "additionalProperties": false,
+    "properties": {
+      "schema_version": {
+        "const": "v1",
+        "default": "v1",
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "state": {
+        "enum": [
+          "ready",
+          "not_configured"
+        ],
+        "title": "State",
+        "type": "string"
+      },
+      "model_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Model Version"
+      },
+      "protocol_version": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Protocol Version"
+      },
+      "calibration": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Calibration"
+      },
+      "target": {
+        "default": "stage1_to_stage2_or_3_48h",
+        "title": "Target",
+        "type": "string"
+      },
+      "metrics": {
+        "anyOf": [
+          {
+            "additionalProperties": {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            "type": "object"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Metrics"
+      },
+      "patient_import_enabled": {
+        "title": "Patient Import Enabled",
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "state",
+      "model_version",
+      "protocol_version",
+      "calibration",
+      "metrics",
+      "patient_import_enabled"
+    ],
+    "title": "ModelStatus",
     "type": "object"
   }
 } as const;

@@ -22,7 +22,7 @@ afterEach(() => vi.unstubAllGlobals());
 test("connected contract selects a real backend fixture and replays future-only outcomes", async () => {
   mockApi();
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["/clinical"]}>
       <App />
     </MemoryRouter>,
   );
@@ -47,7 +47,7 @@ test("connected contract selects a real backend fixture and replays future-only 
 test("corrected labs replace earlier abnormal values through the API", async () => {
   mockApi();
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["/clinical"]}>
       <App />
     </MemoryRouter>,
   );
@@ -65,7 +65,7 @@ test("corrected labs replace earlier abnormal values through the API", async () 
 test("missing follow-up stays unknown and search works", async () => {
   mockApi();
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["/clinical"]}>
       <App />
     </MemoryRouter>,
   );
@@ -81,7 +81,7 @@ test("missing follow-up stays unknown and search works", async () => {
 test("backend failure has an actionable retry without cached results", async () => {
   vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["/clinical"]}>
       <App />
     </MemoryRouter>,
   );
@@ -97,14 +97,14 @@ test("backend failure has an actionable retry without cached results", async () 
 test("research and protocol pages show the pending gate without invented metrics", async () => {
   mockApi();
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["/clinical"]}>
       <App />
     </MemoryRouter>,
   );
   await screen.findByRole("button", { name: /Example A/ });
   fireEvent.click(screen.getByRole("link", { name: "Research Console" }));
   expect(
-    screen.getByRole("heading", { name: "Not yet evaluated" }),
+    screen.getByRole("heading", { name: "Model training handoff" }),
   ).toBeVisible();
   fireEvent.click(screen.getByRole("link", { name: "Clinical Protocol" }));
   expect(
@@ -124,7 +124,7 @@ test("incompatible numeric scores fail closed against generated response schema"
 test("a failed episode request hides prior outcome and provides retry", async () => {
   mockApi();
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={["/clinical"]}>
       <App />
     </MemoryRouter>,
   );

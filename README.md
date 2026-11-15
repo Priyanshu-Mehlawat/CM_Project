@@ -1,13 +1,20 @@
 # RENAL-GUARD
 
-A local research workbench for **adult ICU Stage 1 AKI progression to Stage 2/3
-within 48 hours**. The integrated synthetic application is version **0.2.0**.
+A local research prototype for **adult ICU Stage 1 AKI progression to Stage 2/3
+within 48 hours**, version **0.3.0**.
 
-The clinical study is still gated by dataset/protocol review. The application
-serves independently authored synthetic episodes, backend-computed creatinine
-staging, corrected results and historical replay. It does not substitute a
-24-hour onset model for a progression model. Model probabilities, explanations
-and evaluation metrics are explicitly unavailable.
+The **Patient Assessment** page imports CSV/JSON measurements and evaluates current
+creatinine stage, observed trend, timing and input coverage. A private trained
+progression bundle enables actual model inference and linear influence inspection.
+The offline trainer, shared feature schema and hash-checked JSON loader are now
+implemented. No real-data model was trained in this agent session; prediction
+quality cannot be claimed until the authorized private study is performed.
+
+Start with [the local training and upload guide](docs/LOCAL_TRAINING.md). The app
+opens at **http://127.0.0.1:5173/assess**. Existing synthetic replay is under
+`/clinical`. Patient imports are opt-in in an authorized isolated environment;
+synthetic template assessments work without private data or a model. This remains
+a research prototype, not a patient-care tool.
 
 Read the [project story](docs/WORKFLOW_HISTORY.md),
 [review resolution](docs/review_resolution.md), and
@@ -37,8 +44,8 @@ make dev-frontend
 ```
 
 Open **http://127.0.0.1:5173**. The API uses **http://127.0.0.1:8000**; API docs
-are at `/docs`. Both services bind localhost. There are no accounts, seed passwords,
-patient uploads, data downloads or API keys required for this synthetic demo.
+are at `/docs`. Both services bind localhost. No accounts, seed passwords, data downloads or API keys are required.
+Optional local patient imports and models are described in the training guide.
 
 If using the existing Codex checkout, run these commands from `CM_Project/renal-guard`.
 
@@ -85,6 +92,9 @@ agent-readable filesystem.
 
 | Route | Purpose |
 | --- | --- |
+| `POST /api/v1/assessments` | Transient canonical patient assessment and optional model inference |
+| `POST /api/v1/assessments/import` | Bounded JSON/CSV text import, unit/timing/schema validation |
+| `GET /api/v1/model/status` | Installed progression model, private evaluation metrics and import status |
 | `GET /api/v1/health` | Service liveness separate from model readiness |
 | `GET /api/v1/system/info` | Mode, version and research gate |
 | `GET /api/v1/episodes` | Five synthetic episode summaries |
@@ -94,8 +104,9 @@ agent-readable filesystem.
 
 The development proxy gives the browser a same-origin `/api/v1` interface.
 Contracts are exported with `python -m scripts.export_contract`; there is no
-frontend/backend authentication or schema mismatch. No research endpoints are
-exposed. Research mode fails closed rather than scanning private paths.
+frontend/backend authentication or schema mismatch. Patient import is loopback-only and opt-in for authorized research records.
+Model files are loaded only from an explicit trusted path plus pinned SHA256.
+No dataset directories are scanned.
 
 ## Research path and limitations
 

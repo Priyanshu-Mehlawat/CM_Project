@@ -1,4 +1,14 @@
 {
+  "/api/v1/model/status": {
+    "schema_version": "v1",
+    "state": "not_configured",
+    "model_version": null,
+    "protocol_version": null,
+    "calibration": null,
+    "target": "stage1_to_stage2_or_3_48h",
+    "metrics": null,
+    "patient_import_enabled": false
+  },
   "/api/v1/health": {
     "schema_version": "v1",
     "service_alive": true,
@@ -8,7 +18,7 @@
   "/api/v1/system/info": {
     "schema_version": "v1",
     "name": "RENAL-GUARD",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "mode": "synthetic_demo",
     "research_mode_enabled": false,
     "model_available": false,

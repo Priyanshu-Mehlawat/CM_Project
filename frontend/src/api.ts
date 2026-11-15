@@ -1,13 +1,16 @@
 import { contractSchemas } from "./generated/contracts";
 import type {
+  ModelStatus,
+  PatientAssessment,
   EpisodeList,
   EpisodeView,
   Health,
   ResearchStatus,
   SystemInfo,
 } from "./generated/contracts";
-export type { EpisodeView };
+export type { EpisodeView, ModelStatus, PatientAssessment };
 export interface DemoState {
+  model: ModelStatus;
   health: Health;
   info: SystemInfo;
   cases: EpisodeList["episodes"];
@@ -23,7 +26,7 @@ type Schema = {
   required?: readonly string[];
   properties?: Record<string, Schema>;
   items?: Schema;
-  additionalProperties?: boolean;
+  additionalProperties?: boolean | Schema;
 };
 function matches(
   value: unknown,
@@ -60,7 +63,9 @@ function matches(
         Object.entries(obj).every(([k, v]) =>
           schema.properties?.[k]
             ? matches(v, schema.properties[k], defs)
-            : schema.additionalProperties !== false,
+            : typeof schema.additionalProperties === "object"
+              ? matches(v, schema.additionalProperties, defs)
+              : schema.additionalProperties !== false,
         )
       );
     }
@@ -82,13 +87,14 @@ export async function getContract<T>(
   return data as T;
 }
 export async function loadDemo(signal: AbortSignal): Promise<DemoState> {
-  const [health, info, payload, research] = await Promise.all([
+  const [health, info, payload, research, model] = await Promise.all([
     getContract<Health>("health", "Health", signal),
     getContract<SystemInfo>("system/info", "SystemInfo", signal),
     getContract<EpisodeList>("episodes", "EpisodeList", signal),
     getContract<ResearchStatus>("research/status", "ResearchStatus", signal),
+    getContract<ModelStatus>("model/status", "ModelStatus", signal),
   ]);
-  return { health, info, cases: payload.episodes, research };
+  return { health, info, cases: payload.episodes, research, model };
 }
 export function loadEpisode(id: string, hour: number, signal: AbortSignal) {
   return getContract<EpisodeView>(
@@ -96,4 +102,20 @@ export function loadEpisode(id: string, hour: number, signal: AbortSignal) {
     "EpisodeView",
     signal,
   );
+}
+
+export async function importPatient(format: "json" | "csv", content: string, signal: AbortSignal) {
+  const response = await fetch("/api/v1/assessments/import", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ format, content }), signal,
+  });
+  if (!response.ok) {
+    const message = response.status === 403 ? "Patient imports require an authorized local research environment. See the local training runbook." :
+      response.status === 413 ? "Upload is too large." : "Check template columns, units, timing, adult age, reference and eligibility confirmations. Input was rejected.";
+    throw new Error(message);
+  }
+  const data: unknown = await response.json();
+  const schema: Schema = contractSchemas.PatientAssessment;
+  if (!matches(data, schema, schema.$defs ?? {})) throw new Error("Incompatible assessment response");
+  return data as PatientAssessment;
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { loadDemo, loadEpisode, type DemoState, type EpisodeView } from "./api";
+import PatientUpload from "./PatientUpload";
 import { Button } from "./components/ui/button";
 
 function Timeline({ episode }: { episode: EpisodeView }) {
@@ -334,27 +335,10 @@ function Research({ data }: { data: DemoState }) {
         Protocol, validation and evidence status are reported by the API.
       </p>
       <section className="card research-notice">
-        <div>
-          <h2>Not yet evaluated</h2>
-          <p>{data.research.reason}</p>
-        </div>
+        <div><h2>{data.model.state === "ready" ? "Installed model evaluation" : "Model training handoff"}</h2>
+        <p>{data.model.state === "ready" ? `${data.model.model_version} · ${data.model.calibration}` : "Run the offline progression trainer on protocol-approved, patient-grouped feature rows. Install the resulting private bundle and SHA256 to connect forecasting."}</p></div>
       </section>
-      <div className="summary-grid">
-        {[
-          "Discrimination · AUROC / AUPRC",
-          "Calibration · Brier / plots",
-          "External generalization",
-          "Reliability & coverage",
-        ].map((title) => (
-          <article className="card" key={title}>
-            <h2>{title}</h2>
-            <p>Not yet evaluated</p>
-            <span className="small">
-              No approved progression evaluation artifact
-            </span>
-          </article>
-        ))}
-      </div>
+      {data.model.metrics && <div className="summary-grid">{Object.entries(data.model.metrics).map(([split, metrics]) => <article className="card" key={split}><h2>{split}</h2><dl>{Object.entries(metrics).map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{value.toFixed(3)}</dd></div>)}</dl></article>)}</div>}
       <section className="card protocol">
         <p className="eyebrow">CURRENT RESEARCH GATE</p>
         <h2>G1 · Dataset feasibility pending</h2>
@@ -425,7 +409,7 @@ export default function App() {
       </a>
       <div className="app-shell">
         <aside className="sidebar">
-          <NavLink className="brand" to="/clinical">
+          <NavLink className="brand" to="/assess">
             <span className="brand-mark" aria-hidden="true">
               R
             </span>
@@ -436,17 +420,18 @@ export default function App() {
           </NavLink>
           <p className="nav-label">WORKSPACE</p>
           <nav aria-label="Main navigation">
-            <NavLink to="/clinical">Clinical Explorer</NavLink>
+            <NavLink to="/assess">Patient Assessment</NavLink>
+            <NavLink to="/clinical">Example Replay</NavLink>
             <NavLink to="/research">Research Console</NavLink>
             <NavLink to="/protocol">Clinical Protocol</NavLink>
           </nav>
           <div className="sidebar-note">
             <span className="label">SOURCE BOUNDARY</span>
-            <p>Synthetic fixtures only</p>
+            <p>Local research workbench</p>
             <small>All stages and outcomes come from the canonical API.</small>
           </div>
           <div className="sidebar-footer">
-            Group 31 <span>Research · v0.2</span>
+            Group 31 <span>Research · v0.3</span>
           </div>
         </aside>
         <div className="main-shell">
@@ -455,7 +440,7 @@ export default function App() {
               RENAL-GUARD{" "}
               <span className="breadcrumb">/ Progression research</span>
             </span>
-            <span className="pill">SYNTHETIC DEMO</span>
+            <span className="pill">LOCAL PROTOTYPE</span>
           </header>
           <div className="research-banner">
             <strong>Research Prototype</strong>
@@ -482,20 +467,21 @@ export default function App() {
                 </Button>
               </section>
             ) : !data ? (
-              <p role="status">Connecting to the local synthetic API…</p>
+              <p role="status">Connecting to the local API…</p>
             ) : (
               <>
                 <div className="connection">
                   <span className="connection-dot" aria-hidden="true" /> API
-                  connected <span>· Synthetic demo · Model unavailable</span>
+                  connected <span>· {data.model.state === "ready" ? "Progression model connected" : "Assessment engine ready"}</span>
                 </div>
                 <Routes>
+                  <Route path="/assess" element={<PatientUpload model={data.model} />} />
                   <Route path="/clinical" element={<Explorer data={data} />} />
                   <Route path="/research" element={<Research data={data} />} />
                   <Route path="/protocol" element={<Protocol />} />
                   <Route
                     path="*"
-                    element={<Navigate to="/clinical" replace />}
+                    element={<Navigate to="/assess" replace />}
                   />
                 </Routes>
               </>

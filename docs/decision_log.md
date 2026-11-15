@@ -114,3 +114,34 @@ Publication: feature commit `0dc7e04` pushed to `main`. GitHub Actions run
 43682902343 did not start any steps; annotation says the account is locked due
 to a billing issue. Local gates passed. Remote CI remains unexecuted; no
 billing/account changes were attempted.
+
+
+## 2026-11-15 — 0.3.0 upload assessment and model-backed inference path
+
+User requests actual measurement evaluation and confirms authorized datasets/local
+training capability. Implemented transient local CSV/JSON assessment, explicit
+reference/eligibility input assertions, unit/timing validation, index-only features,
+optional hash-pinned JSON logistic model inference and an offline grouped trainer.
+No private data was accessed or trained, and no onset artifact was substituted.
+The source-only trainer requires reviewed feature rows and protocol approval;
+preparing clinical labels remains gated by the existing G1 decisions.
+
+Default runtime retains synthetic fixtures and accepts synthetic assessment inputs.
+Authorized patient imports require an explicit environment opt-in in an isolated
+local research environment; no private path is configured or scanned. The new
+Patient Assessment route is the default UI. Actual model metrics are served from
+the installed bundle, while unavailable research evidence is not invented.
+
+Engineering policy: optional vitals/labs latest available in preceding 24h; core
+renal/age features mandatory; more than four missing features withholds inference.
+This cutoff is not clinically validated. An uncalibrated research estimate is never
+labeled calibrated; no risk tiers/treatments are generated. Forecasts freeze at first
+Stage 1 index and are withheld outside their scope. The baseline optimizer is
+explicit full-batch L2 logistic regression, not a claim of final model superiority.
+Private large-cohort run-time and scientific performance remain unmeasured.
+
+Checks: 57 Python, 9 React, 4 real Chromium tests; lint/build and heuristic privacy
+checks passed. Local servers respond and remain running. Full readable rationale,
+version history and next evidence request: `WORKFLOW_HISTORY.md` increment 03.
+Scientific gate: G1 decisions and authorized private execution still required;
+software integration is tested, clinical validity is not established.

@@ -630,3 +630,10 @@ td {
 .outcome {
   border-left: 3px solid #488d9d;
 }
+
+textarea { width: 100%; min-height: 320px; resize: vertical; border: 1px solid #cad9e0; border-radius: 7px; padding: 12px; font: 12px/1.6 monospace; background: #f8fbfc; color: #203547; }
+select { border: 1px solid #cad9e0; border-radius: 6px; padding: 9px; background: white; color: #203547; }
+.forecast-value { font-size: 38px !important; font-weight: 650; color: #12675f; }
+.assessment-notes { padding-left: 18px; color: #526779; font-size: 13px; line-height: 1.8; }
+.upload-layout { align-items: start; }
+@media (max-width: 640px) { nav { flex-wrap: wrap; } }

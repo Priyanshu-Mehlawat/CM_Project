@@ -7,13 +7,24 @@ from backend.app.contracts import (
     EpisodeList,
     EpisodeView,
     Health,
+    ModelStatus,
+    PatientAssessment,
     Prediction,
     ResearchStatus,
     SystemInfo,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-MODELS = (Health, SystemInfo, EpisodeList, EpisodeView, Prediction, ResearchStatus)
+MODELS = (
+    Health,
+    SystemInfo,
+    EpisodeList,
+    EpisodeView,
+    Prediction,
+    ResearchStatus,
+    PatientAssessment,
+    ModelStatus,
+)
 
 
 def ts(schema):
@@ -27,6 +38,8 @@ def ts(schema):
         return " | ".join(ts(s) for s in schema["anyOf"])
     kind = schema.get("type")
     if kind == "object":
+        if isinstance(schema.get("additionalProperties"), dict):
+            return "Record<string, " + ts(schema["additionalProperties"]) + ">"
         required = schema.get("required", [])
         return (
             "{ "
@@ -61,6 +74,14 @@ def main():
     from backend.app.episodes import EPISODES, episode_view
 
     fixtures = {
+        "/api/v1/model/status": ModelStatus(
+            state="not_configured",
+            model_version=None,
+            protocol_version=None,
+            calibration=None,
+            metrics=None,
+            patient_import_enabled=False,
+        ).model_dump(),
         "/api/v1/health": Health().model_dump(),
         "/api/v1/system/info": SystemInfo().model_dump(),
         "/api/v1/episodes": EpisodeList(

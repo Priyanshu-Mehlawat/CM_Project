@@ -3,7 +3,7 @@ test("real API → episode → replay → correction → research", async ({
   page,
 }, testInfo) => {
   await page.goto("/clinical");
-  await expect(page.getByText("SYNTHETIC DEMO", { exact: true })).toBeVisible();
+  await expect(page.getByText("LOCAL PROTOTYPE", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: /Example A/ }).click();
   await expect(
     page.getByRole("heading", { name: "Current creatinine stage 1" }),
@@ -29,7 +29,7 @@ test("real API → episode → replay → correction → research", async ({
   ).toBeVisible();
   await page.getByRole("link", { name: "Research Console" }).click();
   await expect(
-    page.getByRole("heading", { name: "Not yet evaluated", exact: true }),
+    page.getByRole("heading", { name: "Model training handoff", exact: true }),
   ).toBeVisible();
 });
 test("mobile layout keeps navigation and case selection usable", async ({

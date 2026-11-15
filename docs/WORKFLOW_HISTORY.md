@@ -176,3 +176,74 @@ The feature release was pushed as `0dc7e04`. GitHub Actions run 43682902343
 failed before starting any step because GitHub reported an account billing lock.
 The code was verified locally; no remote success is claimed. A documentation-only
 follow-up records that external blocker and the feature commit for traceability.
+
+
+## Increment 03 — upload-based assessment and an executable model handoff
+
+**Generated 15 November 2026 · Software version 0.3.0 · Workflow entry 1.3**
+
+The user tried the previous workbench and correctly pointed out that its prediction
+cards did not evaluate uploaded measurements. They asked for a working prototype
+that could ingest patient vitals and estimate worsening. We inspected the app and
+confirmed that the prediction endpoint was deliberately a placeholder, while the
+only complete user flow was synthetic replay. We therefore added a separate
+Patient Assessment workspace instead of merely changing the empty-state wording.
+The user confirmed authorized clinical-dataset access and the ability to run
+training locally. We did not interpret this as completed clinical review or model
+validation, and did not access their private patient files or onset-model artifacts.
+
+The new page imports CSV/JSON for one adult encounter, provides downloadable
+synthetic templates, checks units and time ordering, and sends the actual contents
+to a canonical backend assessment. It shows the observed creatinine stage, change
+from the previous measurement, direction, available history and missing features.
+An explicit earlier reference is required; eligibility is an operator assertion,
+not a fabricated automated cohort decision. Future/unavailable results are hidden,
+corrected duplicates require resolution, and the first eligible Stage 1 index
+freezes the model's input vector. Later measurements can change observed status
+without leaking into that earlier forecast. Existing synthetic replay remains
+available as a separate workspace. Repeated empty metric cards were replaced with
+an actionable training handoff and a view that reads installed model metrics.
+
+We implemented a shared twelve-feature definition and a genuine offline logistic
+baseline trainer. It fits training-only medians/scaling and missingness indicators,
+uses seeded patient-grouped train/validation/test partitions, checks convergence,
+and computes real held-out metrics when run on approved rows. The model bundle
+records target, feature and protocol versions, cohort version, fitted parameters,
+training configuration, grouped split hashes and actual evaluation outputs. The
+API loads only an explicit hash-pinned JSON bundle; it never executes pickle or
+searches private directories. Inference uses those saved parameters and returns an
+actual model probability plus exact linear log-odds influences. No trained clinical
+bundle was produced in this session, no dummy model was installed, and no numeric
+clinical performance is claimed. Synthetic weights exist only within unit tests.
+
+Patient import is local-only, authorized research inputs are opt-in, requests are
+bounded, errors do not echo submitted values, and responses are not cached. Neither
+the app nor its browser code persists uploads or sends them to an external model.
+We added abstention reasons for insufficient model inputs, protocol mismatch,
+current non-Stage-1 status, previously observed progression and an expired forecast
+window. These restrictions are engineering safeguards, not validated confidence
+estimates or treatment thresholds. This system forecasts the specified kidney
+progression outcome, not every possible form of clinical deterioration.
+
+Verification passed: 57 synthetic Python tests, nine React tests, four Chromium
+browser tests including desktop/mobile upload, Ruff/ESLint and TypeScript/Vite
+build. Tests exercise unit conversion, temporal leakage, exact saved-model
+inference, response redaction, CSV/JSON parity, origin/size restrictions, artifact
+integrity, model applicability and patient-grouped held-out preprocessing isolation.
+A pre-existing Starlette test-client deprecation remains. Heuristic worktree and
+reachable-history privacy checks pass. The user's localhost servers remain running;
+research imports and private models were not enabled in the agent environment.
+Remote CI remains subject to the previously documented GitHub billing lock.
+
+The remaining scientific gate is real and specific: privately approve baseline,
+eligibility, follow-up and timing policies; prepare audited index-time feature rows;
+run the trainer outside agent access; review actual held-out results and install a
+vetted private bundle. The runbook provides exact schemas and commands. Raw-table
+cohort extraction, candidate comparison, eICU external validation, calibration,
+uncertainty and prospective evaluation have not been completed. We need only
+approved protocol decisions and disclosure-reviewed aggregate results back from
+the authorized researcher, never patient rows or model weights.
+
+| Document entry | Generated | What changed |
+| --- | --- | --- |
+| 1.3 | 15 November 2026 | Software 0.3.0: real CSV/JSON assessment flow, index-only features, offline progression trainer, trusted model inference, private training runbook and 57 Python / 9 React / 4 browser checks. |

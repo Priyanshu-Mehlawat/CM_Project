@@ -12,17 +12,17 @@ class Contract(BaseModel):
 
 class Health(Contract):
     service_alive: bool = True
-    model_available: Literal[False] = False
+    model_available: bool = False
     mode: Literal["synthetic_demo"] = "synthetic_demo"
 
 
 class SystemInfo(Contract):
     name: str = "RENAL-GUARD"
-    version: str = "0.2.0"
+    version: str = "0.3.0"
     mode: Literal["synthetic_demo"] = "synthetic_demo"
     research_mode_enabled: Literal[False] = False
-    model_available: Literal[False] = False
-    model_version: None = None
+    model_available: bool = False
+    model_version: str | None = None
     evaluation_state: Literal["not_yet_evaluated"] = "not_yet_evaluated"
     protocol_state: Literal["pending_G1"] = "pending_G1"
 
@@ -103,3 +103,48 @@ class ResearchStatus(Contract):
     metrics: None = None
     protocol_state: Literal["pending_G1"] = "pending_G1"
     reason: str = "No approved clinical cohort or validated progression model is available."
+
+
+class Contribution(BaseModel):
+    feature: str
+    log_odds_contribution: float
+
+
+class PatientForecast(BaseModel):
+    state: Literal["available", "withheld", "model_required"]
+    probability: float | None
+    model_version: str | None
+    reason: str
+    calibration: Literal["not_calibrated"]
+    contributions: list[Contribution]
+
+
+class PatientTimelinePoint(BaseModel):
+    measured_hour: float
+    creatinine_mg_dl: float
+
+
+class PatientAssessment(Contract):
+    source: Literal["synthetic", "authorized_research"]
+    stage: int | None
+    trend: str
+    latest_creatinine_mg_dl: float
+    change_mg_dl: float | None
+    index_hour: float | None
+    horizon_hours: Literal[48]
+    feature_version: str
+    features: dict[str, float | None] | None
+    missing_features: list[str]
+    warnings: list[str]
+    prediction: PatientForecast
+    timeline: list[PatientTimelinePoint]
+
+
+class ModelStatus(Contract):
+    state: Literal["ready", "not_configured"]
+    model_version: str | None
+    protocol_version: str | None
+    calibration: str | None
+    target: str = "stage1_to_stage2_or_3_48h"
+    metrics: dict[str, dict[str, float]] | None
+    patient_import_enabled: bool
