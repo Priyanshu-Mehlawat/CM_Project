@@ -247,3 +247,43 @@ the authorized researcher, never patient rows or model weights.
 | Document entry | Generated | What changed |
 | --- | --- | --- |
 | 1.3 | 15 November 2026 | Software 0.3.0: real CSV/JSON assessment flow, index-only features, offline progression trainer, trusted model inference, private training runbook and 57 Python / 9 React / 4 browser checks. |
+
+## Increment 04 — preparing an internet deployment and useful sample files
+
+**Generated 15 November 2026 · Deployment increment 0.3.1 · Document entry 1.4**
+
+The user asked what remained, where MIMIC was being accessed, who would prepare
+CSV inputs and whether the application could first move onto the internet. We
+clarified that no MIMIC access or real training had occurred and that the existing
+trainer consumed approved feature rows rather than extracting them from raw
+clinical tables. The user selected Render for GitHub deployment preparation.
+Sites hosting was inspected but its Worker runtime cannot directly serve the
+existing Python backend; publishing only the React files would disconnect the API.
+We therefore prepared a single Docker service that builds React and serves it
+alongside FastAPI, using Render's supplied port and a real health route.
+
+An internet demo must not become an unauthenticated patient-upload endpoint.
+The public profile therefore exposes a library of nine authored synthetic cases,
+computed assessments and CSV/JSON downloads. It refuses arbitrary assessment
+requests and private model/import configuration, while preserving the existing
+local workflow. Samples cover stable, rising, falling, severe observed stages,
+missing data, delayed availability, alternate units and expired reference timing.
+They illustrate input mechanics, not model performance or every clinical disease.
+
+The deployment guide distinguishes per-measurement input CSVs from index-level
+training CSVs and explains the missing dataset adapters and labeling pipeline.
+It also provides the exact Render Blueprint handoff. The agent has no connected
+Render account, so deployment creation and the provider's actual HTTPS URL remain
+pending owner sign-in. We have not presented a configuration file as a deployed
+website. Docker/provider builds remain unverified here; API tests and the frontend
+build verify source behavior only. No private files were read or published.
+
+| Document entry | Generated | What changed |
+| --- | --- | --- |
+| 1.4 | 15 November 2026 | Render Docker/Blueprint handoff, public sample-only profile, nine CSV/JSON samples, explicit CSV ownership and remaining-work guide. |
+
+Increment 04 verification: 60 Python tests, nine React tests, Ruff/ESLint,
+TypeScript/Vite build, heuristic privacy scans and a combined hosted-entry-point
+smoke passed. The smoke checked SPA routes, health, a computed synthetic sample,
+unknown API 404 and arbitrary-upload rejection. Container image build and actual
+Render deployment were not run. Existing Starlette TestClient deprecation remains.

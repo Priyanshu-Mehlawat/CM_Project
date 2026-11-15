@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink, Navigate, Route, Routes } from "react-router-dom";
 import { loadDemo, loadEpisode, type DemoState, type EpisodeView } from "./api";
+import PublicSamples from "./PublicSamples";
 import PatientUpload from "./PatientUpload";
 import { Button } from "./components/ui/button";
 
@@ -475,7 +476,7 @@ export default function App() {
                   connected <span>· {data.model.state === "ready" ? "Progression model connected" : "Assessment engine ready"}</span>
                 </div>
                 <Routes>
-                  <Route path="/assess" element={<PatientUpload model={data.model} />} />
+                  <Route path="/assess" element={(data.model.public_demo ? <PublicSamples /> : <PatientUpload model={data.model} />)} />
                   <Route path="/clinical" element={<Explorer data={data} />} />
                   <Route path="/research" element={<Research data={data} />} />
                   <Route path="/protocol" element={<Protocol />} />

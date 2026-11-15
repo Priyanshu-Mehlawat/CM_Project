@@ -1,12 +1,15 @@
 """Local research API: synthetic replay, transient assessments and trusted inference."""
 
+import csv
+import io
+import json
 import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException
 
@@ -26,6 +29,7 @@ from backend.app.contracts import (
 )
 from backend.app.episodes import EPISODES, episode_view, find_episode
 from backend.app.patient import ImportInput, PatientInput, assess, parse_import
+from backend.app.samples import CASES
 from ml.inference.bundle import configured_bundle
 
 
@@ -35,6 +39,15 @@ async def lifespan(app: FastAPI):
         raise RuntimeError(
             "Only synthetic demo mode is supported; research requires approved G1 decisions"
         )
+    if os.environ.get("RENAL_GUARD_PUBLIC_DEMO") == "1" and any(
+        os.environ.get(key) for key in ("RENAL_GUARD_MODEL_PATH", "RENAL_GUARD_MODEL_SHA256")
+    ):
+        raise RuntimeError("Public sample hosting cannot load private model artifacts")
+    if (
+        os.environ.get("RENAL_GUARD_PUBLIC_DEMO") == "1"
+        and os.environ.get("RENAL_GUARD_ENABLE_PATIENT_IMPORT") == "1"
+    ):
+        raise RuntimeError("Public sample hosting cannot enable patient imports")
     try:
         app.state.bundle = configured_bundle()
     except (OSError, ValueError):
@@ -117,6 +130,10 @@ def research_status() -> ResearchStatus:
 @app.middleware("http")
 async def local_upload_boundary(request: Request, call_next):
     if request.url.path.startswith("/api/v1/assessments"):
+        if os.environ.get("RENAL_GUARD_PUBLIC_DEMO") == "1":
+            return error(
+                403, "public_samples_only", "Public hosting accepts predefined samples only"
+            )
         origin = request.headers.get("origin")
         if request.client and request.client.host not in ("127.0.0.1", "::1", "testclient"):
             return error(403, "local_only", "Patient import is restricted to this device")
@@ -146,6 +163,7 @@ async def local_upload_boundary(request: Request, call_next):
 def model_status():
     bundle = getattr(app.state, "bundle", None)
     return ModelStatus(
+        public_demo=os.environ.get("RENAL_GUARD_PUBLIC_DEMO") == "1",
         state="ready" if bundle else "not_configured",
         model_version=bundle.model_version if bundle else None,
         protocol_version=bundle.protocol_version if bundle else None,
@@ -182,3 +200,38 @@ def import_assessment(request: ImportInput):
             422, "invalid_upload", "Upload does not match the documented CSV/JSON template"
         )
     return evaluate_patient(patient)
+
+
+@app.get("/api/v1/samples")
+def samples():
+    return {"source": "independently_authored_synthetic", "samples": list(CASES)}
+
+
+@app.get("/api/v1/samples/{sample_id}/assessment", response_model=PatientAssessment)
+def sample_assessment(sample_id: str):
+    if sample_id not in CASES:
+        raise HTTPException(404)
+    return assess(PatientInput.model_validate(CASES[sample_id]))
+
+
+@app.get("/api/v1/samples/{sample_id}/download")
+def download_sample(sample_id: str, format: str = Query(default="json", pattern="^(json|csv)$")):
+    if sample_id not in CASES:
+        raise HTTPException(404)
+    case = CASES[sample_id]
+    if format == "json":
+        content = json.dumps(case, indent=2)
+    else:
+        meta = {k: v for k, v in case.items() if k != "observations"}
+        for key in ("reference_confirmed", "eligibility_confirmed"):
+            meta[key] = "true"
+        output = io.StringIO(newline="")
+        writer = csv.DictWriter(output, fieldnames=[*meta, *case["observations"][0]])
+        writer.writeheader()
+        writer.writerows([{**meta, **o} for o in case["observations"]])
+        content = output.getvalue()
+    return Response(
+        content,
+        media_type="application/json" if format == "json" else "text/csv",
+        headers={"Content-Disposition": f'attachment; filename="synthetic-{sample_id}.{format}"'},
+    )

@@ -141,6 +141,7 @@ class PatientAssessment(Contract):
 
 
 class ModelStatus(Contract):
+    public_demo: bool = False
     state: Literal["ready", "not_configured"]
     model_version: str | None
     protocol_version: str | None

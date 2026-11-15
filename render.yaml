@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: renal-guard
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: RENAL_GUARD_PUBLIC_DEMO
+        value: "1"
+      - key: RENAL_GUARD_ENABLE_PATIENT_IMPORT
+        value: "0"
+      - key: RENAL_GUARD_MODE
+        value: demo

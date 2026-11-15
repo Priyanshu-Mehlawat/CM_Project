@@ -145,3 +145,17 @@ checks passed. Local servers respond and remain running. Full readable rationale
 version history and next evidence request: `WORKFLOW_HISTORY.md` increment 03.
 Scientific gate: G1 decisions and authorized private execution still required;
 software integration is tested, clinical validity is not established.
+
+## 2026-11-15 — Render deployment preparation and synthetic sample library
+
+User selected Render and requested GitHub deployment preparation. Added a
+single-origin Python/React Docker entry point, non-root runtime, Render Blueprint,
+allowlisted Docker context and public-sample-only mode. The anonymous public site
+rejects arbitrary uploads and refuses private model/import configuration. Local
+assessment behavior is preserved. Added nine independently synthetic cases and
+CSV/JSON downloads, plus a public assessment workspace.
+
+No MIMIC data was accessed. The raw-dataset-to-feature-CSV pipeline remains missing;
+its ownership and prerequisites are now explained explicitly. Render account
+connection is unavailable to the agent; the owner must create the Blueprint using
+the prepared GitHub revision. No successful deployment or HTTPS URL is claimed.

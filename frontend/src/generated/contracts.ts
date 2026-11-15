@@ -13,7 +13,7 @@ export type EpisodeList = { schema_version?: "v1"; episodes: Array<EpisodeSummar
 export type EpisodeView = { schema_version?: "v1"; id: string; name: string; description: string; source: "independently_authored_synthetic"; cutoff_hour: number; index_hour: number | null; horizon_hours: 48; protocol_version: string; assessment: ClinicalAssessment; timeline: Array<TimelinePoint>; outcome: Outcome; prediction: Prediction };
 export type ResearchStatus = { schema_version?: "v1"; state?: "not_yet_evaluated"; metrics?: null; protocol_state?: "pending_G1"; reason?: string };
 export type PatientAssessment = { schema_version?: "v1"; source: "synthetic" | "authorized_research"; stage: number | null; trend: string; latest_creatinine_mg_dl: number; change_mg_dl: number | null; index_hour: number | null; horizon_hours: 48; feature_version: string; features: Record<string, number | null> | null; missing_features: Array<string>; warnings: Array<string>; prediction: PatientForecast; timeline: Array<PatientTimelinePoint> };
-export type ModelStatus = { schema_version?: "v1"; state: "ready" | "not_configured"; model_version: string | null; protocol_version: string | null; calibration: string | null; target?: string; metrics: Record<string, Record<string, number>> | null; patient_import_enabled: boolean };
+export type ModelStatus = { schema_version?: "v1"; public_demo?: boolean; state: "ready" | "not_configured"; model_version: string | null; protocol_version: string | null; calibration: string | null; target?: string; metrics: Record<string, Record<string, number>> | null; patient_import_enabled: boolean };
 export const contractSchemas = {
   "Health": {
     "additionalProperties": false,
@@ -707,6 +707,11 @@ export const contractSchemas = {
         "default": "v1",
         "title": "Schema Version",
         "type": "string"
+      },
+      "public_demo": {
+        "default": false,
+        "title": "Public Demo",
+        "type": "boolean"
       },
       "state": {
         "enum": [

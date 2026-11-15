@@ -146,3 +146,15 @@ presentation extra in the project virtual environment and run:
 The script creates an editable PowerPoint and companion documents. PDF export
 requires LibreOffice; the locally delivered PDF was rendered and visually checked.
 See [release verification](docs/release_verification.md) for exact checks and limits.
+
+## Internet deployment and sample files
+
+Render Docker/Blueprint configuration is provided in `Dockerfile` and `render.yaml`.
+See [deployment instructions and remaining work](docs/DEPLOYMENT.md). The public
+build serves predefined synthetic samples only; private patient uploads/models are
+disabled. Creating the service requires the owner's Render account. No hosted URL
+is claimed until Render confirms a successful deployment.
+
+Nine synthetic measurement cases can be downloaded as CSV or JSON from
+`/api/v1/samples/{name}/download?format=csv`; discover names at `/api/v1/samples`.
+These measurement files differ from the private index-level training feature CSV.
