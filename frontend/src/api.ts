@@ -1,44 +1,99 @@
-export interface Health {
-  schema_version: 'v1'; service_alive: boolean; model_available: false; mode: 'synthetic_demo';
+import { contractSchemas } from "./generated/contracts";
+import type {
+  EpisodeList,
+  EpisodeView,
+  Health,
+  ResearchStatus,
+  SystemInfo,
+} from "./generated/contracts";
+export type { EpisodeView };
+export interface DemoState {
+  health: Health;
+  info: SystemInfo;
+  cases: EpisodeList["episodes"];
+  research: ResearchStatus;
 }
-export interface DemoCase {
-  schema_version: 'v1'; id: string; name: string; description: string;
-  source: 'independently_authored_synthetic'; model_state: 'unavailable';
-  probability: null; clinical_stage: null;
+type Schema = {
+  type?: string;
+  const?: unknown;
+  enum?: readonly unknown[];
+  anyOf?: readonly Schema[];
+  $ref?: string;
+  $defs?: Record<string, Schema>;
+  required?: readonly string[];
+  properties?: Record<string, Schema>;
+  items?: Schema;
+  additionalProperties?: boolean;
+};
+function matches(
+  value: unknown,
+  schema: Schema,
+  defs: Record<string, Schema>,
+): boolean {
+  if (schema.$ref)
+    return matches(value, defs[schema.$ref.split("/").at(-1)!], defs);
+  if ("const" in schema && value !== schema.const) return false;
+  if (schema.enum && !schema.enum.includes(value)) return false;
+  if (schema.anyOf) return schema.anyOf.some((s) => matches(value, s, defs));
+  switch (schema.type) {
+    case "null":
+      return value === null;
+    case "string":
+      return typeof value === "string";
+    case "boolean":
+      return typeof value === "boolean";
+    case "number":
+      return typeof value === "number" && Number.isFinite(value);
+    case "integer":
+      return typeof value === "number" && Number.isInteger(value);
+    case "array":
+      return (
+        Array.isArray(value) &&
+        value.every((v) => matches(v, schema.items!, defs))
+      );
+    case "object": {
+      if (!value || typeof value !== "object" || Array.isArray(value))
+        return false;
+      const obj = value as Record<string, unknown>;
+      return (
+        (schema.required ?? []).every((k) => k in obj) &&
+        Object.entries(obj).every(([k, v]) =>
+          schema.properties?.[k]
+            ? matches(v, schema.properties[k], defs)
+            : schema.additionalProperties !== false,
+        )
+      );
+    }
+    default:
+      return true;
+  }
 }
-export interface SystemInfo {
-  schema_version: 'v1'; name: string; version: string; mode: 'synthetic_demo';
-  research_mode_enabled: false; model_available: false; model_version: null;
-  evaluation_state: 'not_yet_evaluated'; protocol_state: 'pending_G1';
-}
-export interface DemoState { health: Health; info: SystemInfo; cases: DemoCase[] }
-async function get(path: string, signal: AbortSignal): Promise<unknown> {
+export async function getContract<T>(
+  path: string,
+  name: keyof typeof contractSchemas,
+  signal: AbortSignal,
+): Promise<T> {
   const response = await fetch(`/api/v1/${path}`, { signal });
-  if (!response.ok) throw new Error('API unavailable');
-  return response.json();
-}
-function object(value: unknown): value is Record<string, unknown> {
-  return typeof value === 'object' && value !== null;
+  if (!response.ok) throw new Error(`API request failed (${response.status})`);
+  const data: unknown = await response.json();
+  const schema: Schema = contractSchemas[name];
+  if (!matches(data, schema, schema.$defs ?? {}))
+    throw new Error("Incompatible API contract");
+  return data as T;
 }
 export async function loadDemo(signal: AbortSignal): Promise<DemoState> {
-  const [health, info, payload] = await Promise.all([
-    get('health', signal), get('system/info', signal), get('demo/cases', signal),
+  const [health, info, payload, research] = await Promise.all([
+    getContract<Health>("health", "Health", signal),
+    getContract<SystemInfo>("system/info", "SystemInfo", signal),
+    getContract<EpisodeList>("episodes", "EpisodeList", signal),
+    getContract<ResearchStatus>("research/status", "ResearchStatus", signal),
   ]);
-  // Fail closed if the server is incompatible with this synthetic-only shell.
-  if (!object(health) || health.schema_version !== 'v1' || health.service_alive !== true ||
-      health.mode !== 'synthetic_demo' || health.model_available !== false ||
-      !object(info) || info.schema_version !== 'v1' || info.mode !== 'synthetic_demo' ||
-      info.model_available !== false || info.research_mode_enabled !== false ||
-      info.model_version !== null || info.evaluation_state !== 'not_yet_evaluated' ||
-      info.protocol_state !== 'pending_G1' || typeof info.name !== 'string' ||
-      typeof info.version !== 'string' || !object(payload) || payload.schema_version !== 'v1' ||
-      !Array.isArray(payload.cases) || !payload.cases.every((item: unknown) =>
-        object(item) && item.schema_version === 'v1' && typeof item.id === 'string' &&
-        typeof item.name === 'string' && typeof item.description === 'string' &&
-        item.source === 'independently_authored_synthetic' && item.model_state === 'unavailable' &&
-        item.probability === null && item.clinical_stage === null)) {
-    throw new Error('Incompatible API contract');
-  }
-  return { health: health as unknown as Health, info: info as unknown as SystemInfo,
-    cases: payload.cases as DemoCase[] };
+  return { health, info, cases: payload.episodes, research };
+}
+export function loadEpisode(id: string, hour: number, signal: AbortSignal) {
+  return getContract<EpisodeView>(
+    `episodes/${encodeURIComponent(id)}?cutoff_hour=${hour}`,
+    "EpisodeView",
+    signal,
+  );
 }

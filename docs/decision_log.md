@@ -74,3 +74,38 @@ claimed. The staged-file scan runs before the commit.
 is ready for isolated researcher use; G1 scientific acceptance is not achieved.
 All policies in `G1_Decision_Template.md` require human review and approval.
 Next engineering stage is Prompt 02 only after those decisions are frozen.
+
+## 2026-11-15 — repair and integrated progression workbench (0.2.0)
+
+The user requested repair of the reviewed EliteAchievers source, cleanup and
+publication into Priyanshu-Mehlawat/CM_Project, plus a fairer mid-term deck.
+Reviewed source was upstream commit 75718c2. Its 24h onset models and disconnected
+UI do not implement the approved progression question; no saved model, patient
+file, exported prediction or credential was migrated. The friend's clone remains
+unchanged. The existing target repository and MIT license were preserved.
+
+Engineering decisions: one `/api/v1` contract and local proxy; generated Pydantic
+TypeScript/runtime schemas; backend-only creatinine arithmetic with explicit
+synthetic reference and latest-available corrections; five independently authored
+fixtures; first-confirmed Stage 1 and 48h outcome replay; no numeric probability
+without a validated progression pipeline. Unknown follow-up is not a negative.
+Unused placeholder cases were removed and old dated prompts archived.
+
+The user authorized engineering choices without supervisor review and explicitly
+confirmed all nine proposal/design contributions. `docs/team_contributions.md`
+records those claims as team-confirmed design work, with corresponding material
+and oral-defense topics. No ranking, sole-code-authorship inference or completed
+clinical experiment is invented. Course/institution/supervisor remain unconfirmed.
+
+Verification: 42 Python tests; 7 React tests; 2 real Chromium desktop/mobile E2E
+tests passed. Ruff/ESLint, TypeScript/Vite build, live proxy smoke and heuristic
+privacy scans passed. App screenshots and 12 presentation slides were rendered
+and visually inspected. Frontend audit reports zero known advisories after a
+targeted dev-tool minimatch override, followed by successful checks. Existing
+Starlette TestClient deprecation and harmless Playwright path/color warnings
+remain. Full results and limits: `docs/release_verification.md`.
+
+G0 software checks pass for this increment. G1 still requires actual isolated data
+feasibility and clinical-policy decisions; no real labels/training/evaluation were
+performed. Synthetic engine tests do not imply G2–G9 scientific completion. The
+user's authorization is not represented as supervisor or clinical approval.

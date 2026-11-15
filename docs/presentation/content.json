@@ -1,0 +1,101 @@
+{
+  "version": "3.1",
+  "generated": "15 November 2026",
+  "deadline": "16 November 2026, 21:00 IST",
+  "timings": [
+    20,
+    45,
+    40,
+    50,
+    70,
+    45,
+    20
+  ],
+  "team": [
+    [
+      "Priyanshu Mehlawat",
+      "2024443",
+      "Methodology & hypothesis",
+      "Prediction framework; system architecture"
+    ],
+    [
+      "Priyanshu",
+      "2024441",
+      "Backend & inference design",
+      "API endpoints; request-to-result workflow"
+    ],
+    [
+      "Harshit Kumar",
+      "2024248",
+      "Clinical evidence synthesis",
+      "AKI significance; prior work and gap"
+    ],
+    [
+      "Shourya Swami",
+      "2024537",
+      "Dataset documentation analysis",
+      "MIMIC/eICU tables, variables and access"
+    ],
+    [
+      "Rishi Srivastava",
+      "2024467",
+      "Staging & cohort design",
+      "KDIGO algorithm; 48h progression logic"
+    ],
+    [
+      "Shaurya Tyagi",
+      "2024525",
+      "Features & leakage prevention",
+      "Feature selection; missingness strategy"
+    ],
+    [
+      "Hemendra Pahwa",
+      "2024258",
+      "Model comparison rationale",
+      "LR, XGBoost and optional LightGBM"
+    ],
+    [
+      "Ayan Ahmed",
+      "2024143",
+      "Validation framework",
+      "AUROC/AUPRC; calibration; external test"
+    ],
+    [
+      "Tejas Singh Bidhuri",
+      "2024590",
+      "Dashboard & interaction design",
+      "Wireframe; risk views and review flow"
+    ]
+  ],
+  "notes": [
+    "Priyanshu Mehlawat: Good morning. We are RENAL-GUARD. Our research question is whether information available at an adult ICU patient's first eligible creatinine-based Stage 1 assessment can predict Stage 2 or 3 within the next 48 hours. We have built an integrated synthetic research workbench; clinical data validation remains future work.",
+    "Harshit Kumar: Acute kidney injury is a sudden decline in kidney function. The AKI-EPI study found AKI in 57.3 percent of 1,802 ICU patients during their first week, using full KDIGO criteria. This is published background evidence, not our progression rate. KDIGO stages severity using creatinine and urine output; our primary operational target uses creatinine. Progression research already exists. We focus on a precise Stage 1-to-Stage 2-or-3 question with strict information availability and comparable external evaluation. The potential value is earlier risk assessment; clinical benefit has not been demonstrated by this project.",
+    "Priyanshu Mehlawat: Our primary hypothesis is that routine information known at the first eligible Stage 1 assessment carries predictive signal for progression within 48 hours. A secondary hypothesis is that nonlinear interactions may improve over Logistic Regression. Shaurya Tyagi: Both hypotheses must be tested. Features stop at the index; future observations are outcomes only. Preprocessing and imputation fit training data, not test patients. We will compare AUROC, AUPRC with prevalence, calibration and Brier score. No numerical performance is claimed.",
+    "Shourya Swami: MIMIC-IV is proposed for development and eICU for external evaluation. The public database documentation supports relevant demographic, laboratory and physiological variables. Dataset analysis so far means documentation and schema analysis, not a completed patient extraction. Access remains unconfirmed. Rishi Srivastava: The cohort starts with adults at first qualifying Stage 1, with a defensible reference creatinine and result-availability cutoff. Outcomes occur strictly after index through 48 hours. Insufficient follow-up stays unknown. Baseline policy, competing events and shared mappings still need an authorized feasibility audit. Published database totals are not our cohort size.",
+    "Priyanshu: The application now uses one versioned backend contract. React renders backend-calculated stages, corrected observations and replay states; it does not recalculate clinical labels. Automated checks exercise the real API-to-browser path. Hemendra Pahwa: Our model plan establishes Logistic Regression first, then compares XGBoost; LightGBM is optional. The choice depends on prespecified development criteria, rather than model complexity. Ayan Ahmed: Patient-grouped splits prevent repeated admissions crossing partitions. We evaluate discrimination and calibration, then freeze the pipeline before a comparable external test. Reused audit sets are not fresh validation. The software mechanics are implemented on synthetic fixtures; real training and generalization remain conditional on approved data and protocol feasibility.",
+    "Tejas Singh Bidhuri: Every team member has a specific proposal or design contribution, confirmed by the team and shown equally here. The dashboard design connects the research workflow to case selection, time-aware replay and explicit missing evidence. Our contribution ledger records each person's intellectual deliverable, corresponding project material and a technical question they should defend. The code was AI-assisted; a file location does not prove sole authorship. Dataset analysis, model rationale and evaluation design are meaningful completed planning work, while extraction, training and clinical validation are separate future milestones. This makes individual assessment specific without inventing experimental achievements.",
+    "Ayan Ahmed: Our expected research deliverables are reproducible progression labels, a fair baseline-versus-nonlinear comparison, and an honest assessment of calibration and external transfer. The integrated synthetic workbench supports that research; it is not a clinically validated predictor. From detecting kidney injury to anticipating its progression. A modest or negative result would still be useful if the question, cohort and evaluation are reproducible and clearly reported."
+  ],
+  "references": [
+    [
+      "Hoste EAJ et al. AKI-EPI. Intensive Care Med. 2015;41:1411\u20131423.",
+      "https://doi.org/10.1007/s00134-015-3934-7"
+    ],
+    [
+      "KDIGO AKI Work Group. Clinical Practice Guideline. Kidney Int Suppl. 2012;2:1\u2013138.",
+      "https://kdigo.org/wp-content/uploads/2019/01/KDIGO-2012-AKI-Guideline-English.pdf"
+    ],
+    [
+      "Johnson AEW et al. MIMIC-IV. Sci Data. 2023;10:1.",
+      "https://doi.org/10.1038/s41597-022-01899-x"
+    ],
+    [
+      "Pollard TJ et al. eICU-CRD. Sci Data. 2018;5:180178.",
+      "https://doi.org/10.1038/sdata.2018.178"
+    ],
+    [
+      "Wei C et al. AKI progression prediction. BMC Med Inform Decis Mak. 2022;22:17.",
+      "https://doi.org/10.1186/s12911-021-01740-2"
+    ]
+  ]
+}

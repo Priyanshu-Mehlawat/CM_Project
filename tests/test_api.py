@@ -25,16 +25,15 @@ def test_system_explicitly_disables_research_and_evaluation():
     assert info["protocol_state"] == "pending_G1"
 
 
-def test_examples_are_synthetic_and_have_no_scores_or_labels():
+def test_examples_are_synthetic_and_have_no_fabricated_predictions():
     with TestClient(app) as client:
-        cases = client.get("/api/v1/demo/cases").json()["cases"]
-    assert len(cases) == 2
-    assert len({case["id"] for case in cases}) == len(cases)
-    for case in cases:
-        assert case["source"] == "independently_authored_synthetic"
-        assert case["probability"] is None
-        assert case["clinical_stage"] is None
-        assert case["model_state"] == "unavailable"
+        cases = client.get("/api/v1/episodes").json()
+        assert cases["source"] == "independently_authored_synthetic"
+        assert len(cases["episodes"]) == 5
+        for case in cases["episodes"]:
+            view = client.get(f"/api/v1/episodes/{case['id']}").json()
+            assert view["prediction"]["probability"] is None
+            assert view["source"] == "independently_authored_synthetic"
 
 
 def test_cors_allows_only_local_frontend():
@@ -64,4 +63,4 @@ def test_unsupported_routes_and_methods_have_redacted_errors():
     assert unsupported.status_code == 405
     assert unsupported.json()["error"]["code"] == "method_not_allowed"
     assert "synthetic-marker" not in unsupported.text
-    assert prediction.status_code == 404
+    assert prediction.status_code == 422

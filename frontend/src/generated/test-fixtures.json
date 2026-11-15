@@ -1,0 +1,1673 @@
+{
+  "/api/v1/health": {
+    "schema_version": "v1",
+    "service_alive": true,
+    "model_available": false,
+    "mode": "synthetic_demo"
+  },
+  "/api/v1/system/info": {
+    "schema_version": "v1",
+    "name": "RENAL-GUARD",
+    "version": "0.2.0",
+    "mode": "synthetic_demo",
+    "research_mode_enabled": false,
+    "model_available": false,
+    "model_version": null,
+    "evaluation_state": "not_yet_evaluated",
+    "protocol_state": "pending_G1"
+  },
+  "/api/v1/episodes": {
+    "schema_version": "v1",
+    "episodes": [
+      {
+        "id": "synthetic-progressor",
+        "name": "Example A \u00b7 Observed progression",
+        "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ."
+      },
+      {
+        "id": "synthetic-observed-negative",
+        "name": "Example B \u00b7 Adequate illustrative follow-up",
+        "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker."
+      },
+      {
+        "id": "synthetic-unknown",
+        "name": "Example C \u00b7 Outcome unknown",
+        "description": "No adequate follow-up: absence of a later severe measurement is not a negative."
+      },
+      {
+        "id": "synthetic-correction",
+        "name": "Example D \u00b7 Corrected laboratory result",
+        "description": "A withdrawn abnormal result is replaced when its correction becomes available."
+      },
+      {
+        "id": "synthetic-stage3",
+        "name": "Example E \u00b7 Stage 3 boundary",
+        "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch."
+      }
+    ],
+    "source": "independently_authored_synthetic"
+  },
+  "/api/v1/research/status": {
+    "schema_version": "v1",
+    "state": "not_yet_evaluated",
+    "metrics": null,
+    "protocol_state": "pending_G1",
+    "reason": "No approved clinical cohort or validated progression model is available."
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=0": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 0.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 1.0,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=6": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 6.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 1.0,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=14": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 14.0,
+    "index_hour": 14.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.6,
+      "latest_measured_hour": 12.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 14.0,
+        "creatinine_mg_dl": 1.6
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=20": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 20.0,
+    "index_hour": 14.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.6,
+      "latest_measured_hour": 12.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 14.0,
+        "creatinine_mg_dl": 1.6
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=32": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 32.0,
+    "index_hour": 14.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 2,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 2.1,
+      "latest_measured_hour": 30.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 14.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "repeat",
+        "measured_hour": 30.0,
+        "available_hour": 32.0,
+        "creatinine_mg_dl": 2.1
+      }
+    ],
+    "outcome": {
+      "state": "progressed",
+      "reason": "stage2_or_3_observed_in_48h",
+      "event_hour": 30.0,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=60": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 60.0,
+    "index_hour": 14.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 2,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 2.1,
+      "latest_measured_hour": 30.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 14.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "repeat",
+        "measured_hour": 30.0,
+        "available_hour": 32.0,
+        "creatinine_mg_dl": 2.1
+      }
+    ],
+    "outcome": {
+      "state": "progressed",
+      "reason": "stage2_or_3_observed_in_48h",
+      "event_hour": 30.0,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-progressor?cutoff_hour=72": {
+    "schema_version": "v1",
+    "id": "synthetic-progressor",
+    "name": "Example A \u00b7 Observed progression",
+    "description": "An invented Stage 1 episode with later Stage 2; collection and availability differ.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 72.0,
+    "index_hour": 14.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 2,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 2.1,
+      "latest_measured_hour": 30.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 14.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "repeat",
+        "measured_hour": 30.0,
+        "available_hour": 32.0,
+        "creatinine_mg_dl": 2.1
+      }
+    ],
+    "outcome": {
+      "state": "progressed",
+      "reason": "stage2_or_3_observed_in_48h",
+      "event_hour": 30.0,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=0": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 0.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 1.0,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=6": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 6.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 1.0,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=14": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 14.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.6,
+      "latest_measured_hour": 12.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=20": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 20.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.6,
+      "latest_measured_hour": 12.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=32": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 32.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.6,
+      "latest_measured_hour": 12.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=60": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 60.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 0,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 4,
+      "latest_creatinine_mg_dl": 1.3,
+      "latest_measured_hour": 60.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "repeat",
+        "measured_hour": 36.0,
+        "available_hour": 36.0,
+        "creatinine_mg_dl": 1.5
+      },
+      {
+        "sample_id": "late",
+        "measured_hour": 60.0,
+        "available_hour": 60.0,
+        "creatinine_mg_dl": 1.3
+      }
+    ],
+    "outcome": {
+      "state": "non_progressed",
+      "reason": "explicit_synthetic_ascertainment",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-observed-negative?cutoff_hour=72": {
+    "schema_version": "v1",
+    "id": "synthetic-observed-negative",
+    "name": "Example B \u00b7 Adequate illustrative follow-up",
+    "description": "An invented non-progressor with an explicitly asserted synthetic ascertainment marker.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 72.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 0,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 4,
+      "latest_creatinine_mg_dl": 1.3,
+      "latest_measured_hour": 60.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "repeat",
+        "measured_hour": 36.0,
+        "available_hour": 36.0,
+        "creatinine_mg_dl": 1.5
+      },
+      {
+        "sample_id": "late",
+        "measured_hour": 60.0,
+        "available_hour": 60.0,
+        "creatinine_mg_dl": 1.3
+      }
+    ],
+    "outcome": {
+      "state": "non_progressed",
+      "reason": "explicit_synthetic_ascertainment",
+      "event_hour": null,
+      "followup_note": "Fixture-only ascertainment asserted at hour 60; not a clinical policy."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=0": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 0.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 1.0,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=6": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 6.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 1.0,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=14": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 14.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.6,
+      "latest_measured_hour": 12.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=20": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 20.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 1.5,
+      "latest_measured_hour": 20.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "last",
+        "measured_hour": 20.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 1.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=32": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 32.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 1.5,
+      "latest_measured_hour": 20.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "last",
+        "measured_hour": 20.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 1.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=60": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 60.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 1.5,
+      "latest_measured_hour": 20.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "last",
+        "measured_hour": 20.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 1.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "insufficient_followup",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-unknown?cutoff_hour=72": {
+    "schema_version": "v1",
+    "id": "synthetic-unknown",
+    "name": "Example C \u00b7 Outcome unknown",
+    "description": "No adequate follow-up: absence of a later severe measurement is not a negative.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 72.0,
+    "index_hour": 12.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 1.5,
+      "latest_measured_hour": 20.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 1.0
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 12.0,
+        "available_hour": 12.0,
+        "creatinine_mg_dl": 1.6
+      },
+      {
+        "sample_id": "last",
+        "measured_hour": 20.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 1.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "insufficient_followup",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=0": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 0.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 0.8,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=6": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 6.0,
+    "index_hour": 6.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.2,
+      "latest_measured_hour": 6.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 6.0,
+        "available_hour": 6.0,
+        "creatinine_mg_dl": 1.2
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=14": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 14.0,
+    "index_hour": 6.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 1.2,
+      "latest_measured_hour": 6.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 6.0,
+        "available_hour": 6.0,
+        "creatinine_mg_dl": 1.2
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=20": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 20.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 0,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 0.9,
+      "latest_measured_hour": 6.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 6.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 0.9
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=32": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 32.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 0,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 0.9,
+      "latest_measured_hour": 6.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 6.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 0.9
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=60": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 60.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 0,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 0.9,
+      "latest_measured_hour": 6.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 6.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 0.9
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-correction?cutoff_hour=72": {
+    "schema_version": "v1",
+    "id": "synthetic-correction",
+    "name": "Example D \u00b7 Corrected laboratory result",
+    "description": "A withdrawn abnormal result is replaced when its correction becomes available.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 72.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 0,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 0.9,
+      "latest_measured_hour": 6.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 0.8
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 6.0,
+        "available_hour": 20.0,
+        "creatinine_mg_dl": 0.9
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=0": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 0.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 2.5,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=6": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 6.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 2.5,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=14": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 14.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 2.5,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=20": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 20.0,
+    "index_hour": null,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": null,
+      "observed_aki": false,
+      "reference_sample_id": "ref",
+      "known_sample_count": 1,
+      "latest_creatinine_mg_dl": 2.5,
+      "latest_measured_hour": 0.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "no_confirmed_stage1_index",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=32": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 32.0,
+    "index_hour": 24.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 3.8,
+      "latest_measured_hour": 24.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 24.0,
+        "available_hour": 24.0,
+        "creatinine_mg_dl": 3.8
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=60": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 60.0,
+    "index_hour": 24.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 1,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 2,
+      "latest_creatinine_mg_dl": 3.8,
+      "latest_measured_hour": 24.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 24.0,
+        "available_hour": 24.0,
+        "creatinine_mg_dl": 3.8
+      }
+    ],
+    "outcome": {
+      "state": "unknown",
+      "reason": "outcome_window_not_complete",
+      "event_hour": null,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  },
+  "/api/v1/episodes/synthetic-stage3?cutoff_hour=72": {
+    "schema_version": "v1",
+    "id": "synthetic-stage3",
+    "name": "Example E \u00b7 Stage 3 boundary",
+    "description": "AKI established by a seven-day ratio can qualify for the 4.0 mg/dL Stage 3 branch.",
+    "source": "independently_authored_synthetic",
+    "cutoff_hour": 72.0,
+    "index_hour": 24.0,
+    "horizon_hours": 48,
+    "protocol_version": "synthetic-fixture-v1-not-approved-for-research",
+    "assessment": {
+      "stage": 3,
+      "observed_aki": true,
+      "reference_sample_id": "ref",
+      "known_sample_count": 3,
+      "latest_creatinine_mg_dl": 4.0,
+      "latest_measured_hour": 72.0,
+      "basis": "KDIGO_2012_creatinine_only_explicit_synthetic_reference"
+    },
+    "timeline": [
+      {
+        "sample_id": "ref",
+        "measured_hour": 0.0,
+        "available_hour": 0.0,
+        "creatinine_mg_dl": 2.5
+      },
+      {
+        "sample_id": "index",
+        "measured_hour": 24.0,
+        "available_hour": 24.0,
+        "creatinine_mg_dl": 3.8
+      },
+      {
+        "sample_id": "severe",
+        "measured_hour": 72.0,
+        "available_hour": 72.0,
+        "creatinine_mg_dl": 4.0
+      }
+    ],
+    "outcome": {
+      "state": "progressed",
+      "reason": "stage2_or_3_observed_in_48h",
+      "event_hour": 72.0,
+      "followup_note": "No adequate negative-outcome ascertainment was asserted."
+    },
+    "prediction": {
+      "state": "unavailable",
+      "probability": null,
+      "reason": "validated_progression_model_unavailable",
+      "model_version": null
+    }
+  }
+}

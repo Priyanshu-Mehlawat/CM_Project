@@ -1,6 +1,6 @@
 # RENAL-GUARD — Project story and version history
 
-**Document version 1.1 · Generated 30 October 2026 (Asia/Kolkata)**
+**Document version 1.2 · Updated 15 November 2026 (Asia/Kolkata)**
 
 This document is the readable record of how RENAL-GUARD was built. Read it first
 if you want to understand the project as a sequence of decisions rather than a
@@ -112,3 +112,62 @@ Explain the reason for any changed design, cite the tests actually run, and
 state the next research or engineering gate. Record its commit hash once known
 in a subsequent document update. Do not treat an implementation
 stage as scientific validation merely because its code is complete.
+
+## Increment 02 — repairing the reviewed implementation and integrating progression
+
+**Generated 15 November 2026 · Software version 0.2.0 · Presentation version 3.1**
+
+The team supplied a friend's completed-project repository and asked for a careful
+review. We found meaningful backend work, but also a different scientific target:
+24-hour first-AKI prediction rather than RENAL-GUARD's Stage 1 progression within
+48 hours. The separately authored frontend could not connect to that backend,
+recomputed clinical stages incorrectly and lacked the tests its README advertised.
+The user then asked us to repair the project, publish the improvements into their
+own repository, remove unnecessary material and improve the contribution slide.
+
+We retained the target repository's useful source-only audit, specification,
+privacy safeguards, Linux setup and license. We did not copy patient files,
+serialized onset models, private exports or temporary test folders. Instead, we
+implemented one coherent progression workbench with an API contract shared by the
+frontend and backend. Response types and runtime schemas are generated from
+Pydantic, so route/schema drift becomes testable. The frontend no longer attempts
+to compute canonical clinical stages, and unused starter cases were removed.
+The original dated prompts are archived rather than mistaken for current status.
+
+The new workbench contains five independently authored synthetic histories. They
+show progression, an explicit fixture-only adequately observed negative, unknown
+follow-up, a retracted result and a Stage 3 boundary. The arithmetic requires an
+explicit earlier reference and respects sample collection and availability times.
+Corrected samples replace older versions only when available. Replay reveals
+observations and retrospective outcomes while keeping predictions unavailable
+until a validated progression pipeline exists. This solves the software mechanics
+without guessing real baseline selection or a clinical follow-up policy.
+
+We wrote regression tests for the review's failures and checked a real API-to-UI
+workflow in Chromium on desktop and mobile. All 42 Python, 7 React and 2 browser
+tests passed, as did lint, build, contract generation, localhost smoke and
+heuristic privacy checks. Screenshots were inspected. A newly reported lint-tool
+dependency advisory was repaired with a targeted override; the final npm audit
+reported zero known advisories. One pre-existing Python test-client deprecation
+warning remains, with harmless browser-runner path/color warnings. These results
+are software evidence, not independent model performance.
+
+During the work the user supplied nine individual contributions. We replaced the
+old vague placeholders with those team-confirmed proposal/design deliverables,
+equal cards, concrete supporting material and specific oral-defense topics. We
+removed the ranking and did not turn design ownership into claims of completed
+experiments or sole code authorship. The 12-slide deck has seven timed main slides,
+five backups, a 562-word script and a dated evidence ledger. All slides were
+rendered and visually inspected, with tight cards/banners refined. The editable
+source and companion notes are committed; generated PowerPoint/PDF files are
+kept separately from source safeguards and older versions are preserved.
+
+The resulting release is a working synthetic research workbench. The next
+scientific milestone is still an authorized isolated dataset audit and reviewed
+baseline, follow-up, eligibility and timing decisions. No actual cohort extraction,
+training, independent clinical validation or demonstrated patient benefit is
+claimed. Those limits are explicit in the application, README and presentation.
+
+| Document entry | Generated | What changed |
+| --- | --- | --- |
+| 1.2 | 15 November 2026 | Repaired integrated software 0.2.0; canonical progression contract, replay, tests and cleanup; presentation 3.1 with nine confirmed design contributions. |

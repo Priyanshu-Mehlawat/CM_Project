@@ -1,12 +1,22 @@
 PYTHON ?= python3
 VENV := .venv/bin
 
-.PHONY: setup test lint dev-backend dev-frontend privacy hooks
+.PHONY: setup test lint dev-backend dev-frontend privacy hooks contract smoke e2e
 setup:
 	$(PYTHON) -m venv --copies .venv
 	$(VENV)/python -m pip install -r requirements-dev.lock
 	$(VENV)/python -m pip install --no-deps --no-build-isolation -e .
 	npm --prefix frontend ci
+
+contract:
+	$(VENV)/python -m scripts.export_contract
+	git diff --exit-code -- frontend/src/generated
+
+e2e:
+	npm --prefix frontend run test:e2e
+
+smoke:
+	$(VENV)/python -m scripts.smoke_demo
 
 test:
 	$(VENV)/python -m pytest

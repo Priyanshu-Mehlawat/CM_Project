@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "renal-guard"
-version = "0.1.0"
+version = "0.2.0"
 description = "Synthetic-only AKI progression research foundation"
 requires-python = ">=3.11"
 dependencies = ["fastapi>=0.115,<1", "pydantic>=2.10,<3", "uvicorn>=0.34,<1"]
@@ -12,6 +12,7 @@ dependencies = ["fastapi>=0.115,<1", "pydantic>=2.10,<3", "uvicorn>=0.34,<1"]
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.11,<1"]
 audit = ["duckdb>=1.1,<2"]
+presentation = ["python-pptx==1.0.2"]
 
 [tool.setuptools.packages.find]
 include = ["backend*", "ml*"]

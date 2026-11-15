@@ -7,6 +7,10 @@
 **Repository:** `https://github.com/Priyanshu-Mehlawat/CM_Project`
 **Environment:** Linux laptop, NVIDIA RTX 4050 laptop GPU; one primary developer, AI-assisted coding.
 
+Current implementation status (15 November 2026): see `release_verification.md`
+and `review_resolution.md`. The specification below remains the research contract;
+its planned deliverables are not claims that all gates have passed.
+
 ## 1. Project identity and boundaries
 
 **Working name:** RENAL-GUARD — Generalizable and Reliability-Aware Prediction of Acute Kidney Injury Progression in Critical Care.

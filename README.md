@@ -1,39 +1,23 @@
 # RENAL-GUARD
 
-A local research prototype for studying adult ICU **Stage 1 AKI progression to
-Stage 2/3 within 48 hours**, with planned MIMIC-IV development and harmonized eICU
-external evaluation. This is an educational research project, not a clinical tool.
+A local research workbench for **adult ICU Stage 1 AKI progression to Stage 2/3
+within 48 hours**. The integrated synthetic application is version **0.2.0**.
 
-**Current increment: Stage 01 — offline dataset audit tooling.** Stage 00's
-synthetic application foundation remains available. No clinical labeling,
-training, prediction, or evaluation has been performed. The API and UI explicitly
-report **Model unavailable** and **Not yet evaluated**.
+The clinical study is still gated by dataset/protocol review. The application
+serves independently authored synthetic episodes, backend-computed creatinine
+staging, corrected results and historical replay. It does not substitute a
+24-hour onset model for a progression model. Model probabilities, explanations
+and evaluation metrics are explicitly unavailable.
 
-Start with the [project story and version history](docs/WORKFLOW_HISTORY.md)
-for a readable account of every completed increment and why it was built.
+Read the [project story](docs/WORKFLOW_HISTORY.md),
+[review resolution](docs/review_resolution.md), and
+[team contribution ledger](docs/team_contributions.md).
 
-## What works
+## Run on Linux
 
-- React/TypeScript/Vite frontend with Clinical Explorer and Research Console routes.
-- Persistent Synthetic Demo / Research Prototype notices, selectable invented
-  examples, provenance details, API connection/retry and empty states.
-- FastAPI/Pydantic versioned health, system information and synthetic case APIs.
-- Local-only defaults, restricted CORS, redacted structured errors, fail-closed
-  research-mode configuration, and no data connectors or model loading.
-- Python tests, UI interaction tests, frontend lint/type/build checks, synthetic-only
-  CI, and source/staged/history file and secret safeguards.
-- Modular `ml/` placeholders and the original implementation package under `docs/`.
-- A DuckDB-based offline audit CLI for explicitly listed MIMIC-IV/eICU CSV or
-  compressed CSV tables. It inventories candidate schemas, count buckets,
-  missingness, creatinine/unit patterns, timestamps, linkage, pre-ICU and early
-  post-admission observations, optional dialysis signals, and hospital coverage.
-  It produces no clinical labels and has run only on invented temporary fixtures.
-
-## Run locally
-
-Requirements: Linux, Python **3.14** (the tested environment), Node **22.22+**,
-`npm`, Git and Make. Dependency installation needs internet access. The source
-allows Python 3.11+, but other Python versions have not been verified yet.
+Tested with Python 3.14 and Node 22.22+. Source supports Python 3.11+; other Python
+versions are not verified. Git and Make are required. Setup installs project-local
+dependencies from lockfiles and needs network access.
 
 ```bash
 git clone https://github.com/Priyanshu-Mehlawat/CM_Project.git
@@ -42,10 +26,7 @@ make setup
 make hooks
 ```
 
-If using the checkout prepared by Codex, start in `CM_Project/renal-guard` instead
-of cloning again. `make hooks` enables the included local pre-commit safeguard.
-
-Run in separate terminals from the repository root:
+Run in two terminals:
 
 ```bash
 make dev-backend
@@ -55,79 +36,102 @@ make dev-backend
 make dev-frontend
 ```
 
-Open **http://127.0.0.1:5173**. The frontend proxies `/api` to
-**http://127.0.0.1:8000**. The services bind to localhost. API docs are at
-http://127.0.0.1:8000/docs. No environment file, dataset, GPU or model is required.
-The `.env.example` documents the supported mode; `.env` loading is not enabled.
+Open **http://127.0.0.1:5173**. The API uses **http://127.0.0.1:8000**; API docs
+are at `/docs`. Both services bind localhost. There are no accounts, seed passwords,
+patient uploads, data downloads or API keys required for this synthetic demo.
 
-## Stage 01 audit handoff
+If using the existing Codex checkout, run these commands from `CM_Project/renal-guard`.
 
-**G1 BLOCKED PENDING AUTHORIZED HUMAN-RUN AGGREGATE AUDIT.** The audit requires
-credentialed files and must run separately in an isolated research environment.
-Codex has not inspected or processed those files. The [runbook](docs/offline_audit_runbook.md)
-shows the private manifest format, setup, `--dry-run`, and actual offline command.
-The [audit template](docs/dataset_audit_template.md) and
-[G1 decision template](docs/G1_Decision_Template.md) list the evidence and
-human-reviewed decisions needed before Stage 02. Do not put a private manifest,
-audit output, patient data, or reviewed source paths in the repository.
+## What to demonstrate
 
-The CLI writes aggregate JSON and Markdown to an explicitly supplied private
-directory. Counts below the configured minimum are suppressed; larger counts
-are bucketed. Its candidate mappings and text searches are **unverified**.
-An authorized reviewer must still check every aggregate for disclosure risk
-before sharing it.
+1. Select Example A at hour 14: confirmed Stage 1, future outcome unknown.
+2. Move to hour 32: the later Stage 2 observation is revealed; the index stays 14.
+3. Select Example D and move from hour 14 to 20: a corrected sample removes the
+   retracted abnormality and invalidates that synthetic Stage 1 episode.
+4. Example C stays outcome-unknown without adequate follow-up. Example B has an
+   explicit fixture-only ascertainment marker. Example E tests the Stage 3 boundary.
+5. Open Research Console and Clinical Protocol to see evidence availability and
+   the decisions needed before real clinical labeling or training.
 
-## Check the increment
+Only the backend calculates stages/outcomes. The React client validates responses
+against generated Pydantic schemas and never invents predictions or computes stages.
+The diagram uses observed dots rather than a fabricated continuous physiologic curve.
+
+## Verify
 
 ```bash
 make lint
 make test
+make smoke
+make contract
 ```
 
-`make test` runs Python tests, UI interaction tests, TypeScript checking, a
-production frontend build, and worktree/history safeguards. CI runs the same
-synthetic checks. Dependencies are pinned in `requirements-dev.lock` and
-`frontend/package-lock.json`. The Python lock was captured on Linux/Python 3.14.
-The production UI build is in ignored `frontend/dist/`; API integration is
-configured for the Vite development server at this stage.
+For browser checks, install Chromium once with
+`cd frontend && npm exec playwright install chromium`, then run `make e2e`
+from the repository root. Browser download is optional for ordinary demo use.
 
-The included privacy scanner is a **heuristic**, not proof of de-identification.
-It checks tracked/unignored source, staged blobs, and reachable Git history;
-it does not traverse ignored private files. It rejects prohibited file categories
-before reading their contents and never prints matching secrets. Human disclosure
-review and filesystem isolation are still required.
+Tests use synthetic fixtures only. `make smoke` briefly starts owned localhost
+servers and checks the real frontend proxy/API, then stops those servers. Ensure
+ports 8000 and 5173 are free. `make contract` regenerates frontend contracts and
+fixtures and fails if tracked output drifts. CI runs these checks without data or
+research credentials. Frontend errors hide stale episode results and expose retry.
 
-## Layout
+`make privacy` checks source, staged files through the hook, and reachable Git
+history using heuristics. These do not certify PHI detection or replace disclosure
+review. Restricted files and models must remain outside both the checkout and the
+agent-readable filesystem.
 
-| Path | Purpose |
+## API contract
+
+| Route | Purpose |
 | --- | --- |
-| `backend/app/` | FastAPI app, response contracts and invented demo cases |
-| `frontend/` | React shell, Tailwind and locally owned UI primitive |
-| `ml/ingestion/` | Offline source schema candidates and aggregate audit program |
-| `ml/clinical/`, `ml/features/`, `ml/training/`, `ml/evaluation/` | Pending later gates |
-| `tests/` | Synthetic API and repository safeguard tests |
-| `scripts/` | Source-only repository checks and offline audit CLI |
-| `docs/` | Specification, decisions, governance, architecture and staged prompts |
+| `GET /api/v1/health` | Service liveness separate from model readiness |
+| `GET /api/v1/system/info` | Mode, version and research gate |
+| `GET /api/v1/episodes` | Five synthetic episode summaries |
+| `GET /api/v1/episodes/{id}?cutoff_hour=14` | Available corrected observations, clinical stage, index and retrospective outcome |
+| `POST /api/v1/predictions` | Explicit unavailable result for known episode; accepts only 48h horizon |
+| `GET /api/v1/research/status` | Genuine absence of evaluation artifacts |
 
-The shadcn configuration and a native accessible button are included; a full
-component library and clinical dashboard belong to later stages.
+The development proxy gives the browser a same-origin `/api/v1` interface.
+Contracts are exported with `python -m scripts.export_contract`; there is no
+frontend/backend authentication or schema mismatch. No research endpoints are
+exposed. Research mode fails closed rather than scanning private paths.
 
-## Research gates and next part
+## Research path and limitations
 
-Stage 01 adds the source-only feasibility audit. See
-[the decision log](docs/decision_log.md) for validation evidence and limitations.
-The next engineering increment is [Prompt 02 — clinical engine](docs/prompts/02_kdigo_clinical_engine.md),
-which requires the G1 decisions to be reviewed and frozen first.
+**G1 remains pending.** [Clinical protocol](docs/clinical_protocol.md) and
+[research plan](docs/research_plan.md) define the unresolved baseline, eligibility,
+latency, negative-follow-up, competing-event and harmonization choices. The
+synthetic reference and ascertainment assertions are not clinical defaults.
+No real labels, training, independent evaluation or patient-care benefit is claimed.
 
-**G1 remains pending.** Dataset versions, baseline creatinine, eligibility,
-result-availability timing, adequate negative-outcome follow-up/competing events,
-and shared cross-dataset features require human-reviewed audit decisions before
-clinical labeling or training. Missing follow-up must remain unknown, not negative.
+The [offline audit runbook](docs/offline_audit_runbook.md) and
+[G1 form](docs/G1_Decision_Template.md) support isolated, authorized researcher use.
+The original dated stage prompts are retained under `docs/archive/2026-10-30/`.
 
-Keep credentialed datasets outside both the repository and the agent's readable
-filesystem using OS/container isolation. Do not share patient rows, original IDs,
-private model artifacts or unreviewed outputs with coding agents or CI. No private
-data location is configured by this application.
+The reviewed EliteAchievers project informed the repair priorities. Its patient
+tables, onset models, exported predictions, disconnected account UI, mortality
+views and external-AI summaries were not imported into the public source release.
+See [migration decisions](docs/review_resolution.md) for exact scope and provenance.
 
-Read [AGENTS.md](AGENTS.md), [the master specification](docs/MASTER_SPECIFICATION.md)
-and [the clinical protocol](docs/clinical_protocol.md) before later implementation.
+## Presentation and fair attribution
+
+The updated deck is generated separately from reviewed source under
+`docs/presentation/`. [The contribution ledger](docs/team_contributions.md) gives
+all nine members a concrete, equally defensible work package with evidence paths.
+Proposed assignments are not represented as completed personal achievements.
+Actual completed ownership requires team attestation. The 15 November workflow
+entry records this software/presentation revision and its verification.
+
+
+To regenerate the presentation outside the source checkout, install the optional
+presentation extra in the project virtual environment and run:
+
+```bash
+.venv/bin/python -m pip install -e '.[presentation]'
+.venv/bin/python scripts/build_presentation.py --output /tmp/renalguard-presentation
+```
+
+The script creates an editable PowerPoint and companion documents. PDF export
+requires LibreOffice; the locally delivered PDF was rendered and visually checked.
+See [release verification](docs/release_verification.md) for exact checks and limits.
