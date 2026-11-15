@@ -1,18 +1,61 @@
 import { useEffect, useState } from "react";
-const cases = ["stable-no-aki", "stage1-rising", "stage1-falling", "stage2-observed", "stage3-observed", "missing-vitals", "delayed-result", "micromol-units", "expired-reference"];
+import { loadSample, type PatientAssessment } from "./api";
+import { Button } from "./components/ui/button";
+const scenarios = [
+  ["stable-no-aki", "Stable creatinine", "Values do not meet creatinine-based AKI criteria."],
+  ["stage1-rising", "Stage 1 · rising", "An observed increase from the first to the latest sample."],
+  ["stage1-falling", "Stage 1 · falling", "An observed decrease, with Stage 1 still present."],
+  ["stage2-observed", "Stage 2 observed", "Progression is already present in the measurements."],
+  ["stage3-observed", "Stage 3 observed", "The latest sample meets the Stage 3 creatinine branch."],
+  ["missing-vitals", "Missing vitals", "Kidney staging works while optional model inputs are absent."],
+  ["delayed-result", "Delayed lab result", "The latest collected result is not yet available at cutoff."],
+  ["micromol-units", "Creatinine in µmol/L", "The backend converts values into the common mg/dL unit."],
+  ["expired-reference", "Reference outside timing window", "The reference is too old for the supported comparison."],
+];
 export default function PublicSamples() {
-  const [selected, setSelected] = useState(cases[0]);
-  const [result, setResult] = useState<{stage: number | null; trend: string; latest_creatinine_mg_dl: number; index_hour: number | null; missing_features: string[]; warnings: string[]} | null>(null);
+  const [selected, setSelected] = useState(scenarios[0][0]);
+  const [loaded, setLoaded] = useState<{id: string; data: PatientAssessment} | null>(null);
   const [error, setError] = useState(false);
+  const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`/api/v1/samples/${selected}/assessment`, {signal: controller.signal})
-      .then(async r => { if (!r.ok) throw new Error("Assessment failed"); return r.json(); })
-      .then(data => { if (!controller.signal.aborted) {setResult(data); setError(false);} })
+    loadSample(selected, controller.signal)
+      .then(data => { if (!controller.signal.aborted) {setLoaded({id: selected, data}); setError(false);} })
       .catch(() => { if (!controller.signal.aborted) setError(true); });
     return () => controller.abort();
-  }, [selected]);
-  return <><h1>RENAL-GUARD · Public research demo</h1><p className="intro">Explore independently authored measurements and download matching CSV/JSON files. No real patient uploads or private models are accepted by this public deployment.</p>
-    <div className="workspace"><section className="card"><h2>Sample library</h2><label className="search-label" htmlFor="sample">Choose a scenario</label><select id="sample" value={selected} onChange={e => {setResult(null); setSelected(e.target.value);}}>{cases.map(c => <option key={c} value={c}>{c.replaceAll("-", " ")}</option>)}</select><div className="preset-row"><a className="button" href={`/api/v1/samples/${selected}/download?format=csv`}>Download CSV</a><a className="button" href={`/api/v1/samples/${selected}/download?format=json`}>Download JSON</a></div><p className="small">Every file is synthetic. Stage and direction describe observed measurements; they do not establish future worsening.</p></section>
-    <section className="card" aria-live="polite"><h2>Computed assessment</h2>{error ? <p role="alert">Could not load this sample. Refresh to retry.</p> : !result ? <p>Assessing sample…</p> : <><h2>{result.stage == null ? "Insufficient reference timing" : `Current creatinine stage ${result.stage}`}</h2><p>Latest creatinine: {result.latest_creatinine_mg_dl.toFixed(2)} mg/dL</p><p>Observed direction: {result.trend.replaceAll("_", " ")}</p><p>Stage 1 index: {result.index_hour == null ? "Outside model scope" : `Hour ${result.index_hour}`}</p><ul className="assessment-notes">{result.warnings.map(w => <li key={w}>{w}</li>)}</ul>{result.missing_features.length > 0 && <p>Missing: {result.missing_features.join(", ")}</p>}<p className="small">A real 48-hour forecast requires private model training and evaluation. No clinical performance is claimed.</p></>}</section></div></>;
+  }, [selected, attempt]);
+  const result = loaded?.id === selected ? loaded.data : null;
+  const scenario = scenarios.find(s => s[0] === selected)!;
+  return <>
+    <p className="eyebrow">COMPUTED FROM OBSERVED MEASUREMENTS</p>
+    <h1>Sample assessment</h1>
+    <p className="intro">Inspect a synthetic case, trace its creatinine measurements and download the exact input. All calculations come from the assessment API.</p>
+    <div className="workspace upload-layout">
+      <section className="card">
+        <h2>Nine sample scenarios</h2>
+        <label className="search-label" htmlFor="sample">Choose a scenario</label>
+        <select id="sample" value={selected} onChange={e => {setError(false); setSelected(e.target.value);}}>
+          {scenarios.map(([id, title]) => <option key={id} value={id}>{title}</option>)}
+        </select>
+        <p className="space-top">{scenario[2]}</p>
+        <dl><div><dt>Source</dt><dd>Independently authored synthetic measurements</dd></div><div><dt>Cutoff</dt><dd>ICU hour 8 · results available by this time</dd></div><div><dt>Formats</dt><dd>One encounter · identical CSV and JSON contents</dd></div></dl>
+        <div className="preset-row">
+          <a className="button" href={`/api/v1/samples/${selected}/download?format=csv`}>Download CSV</a>
+          <a className="button" href={`/api/v1/samples/${selected}/download?format=json`}>Download JSON</a>
+        </div>
+        <p className="small">Public samples only. For time-dependent outcomes and corrected results, open Example Replay.</p>
+      </section>
+      <section className="card" aria-live="polite" aria-busy={!error && !result}>
+        {error ? <div role="alert"><h2>Sample could not be assessed</h2><p>No earlier result is displayed. Retry to request the current case again.</p><Button onClick={() => {setError(false); setAttempt(v => v + 1);}}>Retry sample</Button></div> : !result ? <p role="status">Assessing sample…</p> : <>
+          <div className="card-title"><h2>{result.stage == null ? "Reference timing insufficient" : `Current creatinine stage ${result.stage}`}</h2><span className="pill">OBSERVED</span></div>
+          <dl><div><dt>Latest available creatinine</dt><dd>{result.latest_creatinine_mg_dl.toFixed(2)} mg/dL</dd></div><div><dt>Direction since previous measurement</dt><dd>{result.trend.replaceAll("_", " ")}{result.change_mg_dl != null && ` (${result.change_mg_dl >= 0 ? "+" : ""}${result.change_mg_dl.toFixed(2)} mg/dL)`}</dd></div><div><dt>First eligible Stage 1 index in supplied history</dt><dd>{result.index_hour == null ? "No eligible index" : `Hour ${result.index_hour}`}</dd></div></dl>
+          <h2 className="space-top">Available measurement history</h2>
+          <div className="table-scroll"><table><caption className="sr-only">Creatinine observations known at cutoff</caption><thead><tr><th>Measured hour</th><th>Creatinine · mg/dL</th></tr></thead><tbody>{result.timeline.map((point, i) => <tr key={i}><td>{point.measured_hour}</td><td>{point.creatinine_mg_dl.toFixed(2)}</td></tr>)}</tbody></table></div>
+          <h2 className="space-top">Assessment checks</h2>
+          <ul className="assessment-notes">{result.warnings.map(w => <li key={w}>{w}</li>)}{result.stage == null && <li>The reference cannot support staging at the latest measurement time.</li>}{result.missing_features.length > 0 && <li>Absent at Stage 1 index: {result.missing_features.join(", ")}. Values have not been invented.</li>}</ul>
+          <p className="small">Observed stage and direction are not a prediction of future worsening. No trained clinical model is connected to this public demo.</p>
+        </>}
+      </section>
+    </div>
+  </>;
 }

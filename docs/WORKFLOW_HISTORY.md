@@ -287,3 +287,53 @@ TypeScript/Vite build, heuristic privacy scans and a combined hosted-entry-point
 smoke passed. The smoke checked SPA routes, health, a computed synthetic sample,
 unknown API 404 and arbitrary-upload rejection. Container image build and actual
 Render deployment were not run. Existing Starlette TestClient deprecation remains.
+
+
+## Increment 05 — keep working features and explain private data placement
+
+**Generated 15 November 2026 · Document version 1.5**
+
+The user reported that the Render service had been created and asked to keep only
+working features, improve them and explain whether MIMIC belonged locally, on
+Colab or elsewhere. The initial dashboard URL required login, so we requested the
+public URL instead of guessing the deployment address. The user supplied
+https://renal-guard.onrender.com. Its health and model-status endpoints responded;
+the rendered page showed computed synthetic assessment. Public sample mode was
+active, private imports were disabled and there was no installed clinical model.
+
+We removed the replay's inactive prediction card and replaced it with actual
+available-measurement information. Research Console is no longer advertised or
+reachable as an empty training handoff when no evaluation exists; a ready model
+with actual metrics can still expose it. The usage page now explains available
+workflows instead of filling the product with development-gate instructions.
+No true unknown outcome or unsupported reference comparison was disguised as a
+negative or a normal clinical state merely to make the interface look complete.
+
+We improved sample assessment around operations the backend already performs:
+clear scenario descriptions, available creatinine history, values and units,
+assessment checks, matched CSV/JSON downloads and an actual retry button. The
+client validates the full generated assessment schema and hides a previous case
+when another selection fails. Public/local labeling now reflects the deployment.
+Regression tests cover failed selection, response incompatibility, history,
+download matching and desktop/mobile usability without adding unrelated features.
+
+For MIMIC we checked the official project, credentialing FAQ and BigQuery setup.
+The guide recommends an encrypted research VM/machine outside coding-agent access;
+a same-login folder or .gitignore is not an isolation guarantee. Official
+credentialed BigQuery is an alternative. Colab requires a review of the actual
+runtime, sharing and institutional/DUA conditions rather than a blanket claim of
+approval. Restricted datasets, derived feature CSVs and model artifacts remain
+outside the public Render/GitHub service. No private records were accessed.
+The missing raw-table extraction/labeling pipeline is stated explicitly; storage
+alone does not complete that pipeline or train a model.
+
+| Document entry | Generated | What changed |
+| --- | --- | --- |
+| 1.5 | 15 November 2026 | Verified public service, removed inactive UI, improved typed sample assessment/history/retry, added source-backed private storage guide. |
+
+Increment 05 verification: 12 React tests, five Chromium tests, frontend lint,
+TypeScript/Vite production build and heuristic privacy scans passed. Backend
+clinical calculations were unchanged, so the previous 60-test Python result is
+not represented as a new execution. Existing harmless Playwright color warning
+remains. Public pre-update deployment was verified; the pushed interface revision
+requires Render to finish its subsequent deployment before it appears online.

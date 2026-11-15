@@ -27,10 +27,8 @@ test("real API → episode → replay → correction → research", async ({
   await expect(
     page.getByRole("heading", { name: "Current creatinine stage 0" }),
   ).toBeVisible();
-  await page.getByRole("link", { name: "Research Console" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Model training handoff", exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("link", { name: "Research Console" })).toHaveCount(0);
+
 });
 test("mobile layout keeps navigation and case selection usable", async ({
   page,
@@ -45,7 +43,7 @@ test("mobile layout keeps navigation and case selection usable", async ({
     path: testInfo.outputPath("mobile.png"),
     fullPage: true,
   });
-  await page.getByRole("link", { name: "Clinical Protocol" }).click();
+  await page.getByRole("link", { name: "How it works" }).click();
   await expect(
     page.getByRole("heading", { name: "Clinical protocol", exact: true }),
   ).toBeVisible();
@@ -54,4 +52,20 @@ test("mobile layout keeps navigation and case selection usable", async ({
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBeTruthy();
+});
+
+test("public sample workspace shows working tools and real measurement history", async ({page}) => {
+  await page.route("**/api/v1/model/status", async route => {
+    const response = await route.fetch();
+    await route.fulfill({json: {...await response.json(), public_demo: true}});
+  });
+  await page.goto("/assess");
+  await expect(page.getByText("PUBLIC SYNTHETIC DEMO", {exact: true})).toBeVisible();
+  await expect(page.getByRole("heading", {name: "Current creatinine stage 0"})).toBeVisible();
+  await page.getByLabel("Choose a scenario").selectOption("stage2-observed");
+  await expect(page.getByRole("heading", {name: "Current creatinine stage 2"})).toBeVisible();
+  await expect(page.getByRole("cell", {name: "2.10", exact: true})).toBeVisible();
+  await expect(page.getByRole("link", {name: "Research Console"})).toHaveCount(0);
+  await page.setViewportSize({width:390,height:844});
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
 });

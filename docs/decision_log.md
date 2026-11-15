@@ -159,3 +159,23 @@ No MIMIC data was accessed. The raw-dataset-to-feature-CSV pipeline remains miss
 its ownership and prerequisites are now explained explicitly. Render account
 connection is unavailable to the agent; the owner must create the Blueprint using
 the prepared GitHub revision. No successful deployment or HTTPS URL is claimed.
+
+
+## 2026-11-15 — focused working UI and verified public service
+
+User supplied public URL renal-guard.onrender.com; live health, model status and
+rendered assessment responded. Public mode is enabled, private patient import is
+disabled, and no clinical model is installed. Dashboard-only service identity was
+not treated as proof of deployment until the public endpoint could be checked.
+
+Removed the inactive replay prediction card, hid Research Console unless a ready
+model has actual metrics, and replaced development-gate UI copy with usage
+explanations. Improved sample assessment with typed response validation, measured
+history, descriptive scenarios, matched downloads, stale-result prevention and
+retry. Underlying scientific gates/unknown outcomes are preserved; no fake score
+was added to fill an empty screen.
+
+MIMIC storage guide recommends encrypted local research isolation inaccessible to
+the agent, with official PhysioNet-accessed BigQuery as an alternative. Colab is
+not presumed automatically approved or universally forbidden. No private path was
+created, scanned or read. Public Render remains synthetic-only.

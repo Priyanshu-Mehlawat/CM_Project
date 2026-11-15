@@ -196,12 +196,10 @@ function Workspace({ id }: { id: string }) {
               </span>
             </article>
             <article className="card">
-              <span className="label">Prediction inspector</span>
-              <h2>Model unavailable</h2>
-              <p>No validated progression model is loaded.</p>
-              <span className="small">
-                No risk tier, probability or explanation is invented.
-              </span>
+              <span className="label">Available measurements</span>
+              <h2>{current.assessment.known_sample_count} known samples</h2>
+              <p>Collected and available by hour {hour}. Later results are hidden.</p>
+              <span className="small">The timeline below shows only observed values.</span>
             </article>
           </div>
           <Timeline episode={current} />
@@ -335,20 +333,7 @@ function Research({ data }: { data: DemoState }) {
       <p className="intro">
         Protocol, validation and evidence status are reported by the API.
       </p>
-      <section className="card research-notice">
-        <div><h2>{data.model.state === "ready" ? "Installed model evaluation" : "Model training handoff"}</h2>
-        <p>{data.model.state === "ready" ? `${data.model.model_version} · ${data.model.calibration}` : "Run the offline progression trainer on protocol-approved, patient-grouped feature rows. Install the resulting private bundle and SHA256 to connect forecasting."}</p></div>
-      </section>
       {data.model.metrics && <div className="summary-grid">{Object.entries(data.model.metrics).map(([split, metrics]) => <article className="card" key={split}><h2>{split}</h2><dl>{Object.entries(metrics).map(([name, value]) => <div key={name}><dt>{name}</dt><dd>{value.toFixed(3)}</dd></div>)}</dl></article>)}</div>}
-      <section className="card protocol">
-        <p className="eyebrow">CURRENT RESEARCH GATE</p>
-        <h2>G1 · Dataset feasibility pending</h2>
-        <p>
-          Baseline/reference creatinine, result availability, eligibility,
-          adequate follow-up and shared mappings require documented review.
-          Missing outcomes remain unknown.
-        </p>
-      </section>
     </>
   );
 }
@@ -364,21 +349,13 @@ function Protocol() {
           Stage 1. Outcome: creatinine-defined Stage 2/3 after index through
           index + 48 hours. No onset model is used as a progression model.
         </p>
-        <h2 className="space-top">Before real labeling or training</h2>
+        <h2 className="space-top">What you can do here</h2>
         <ol className="method-list">
-          <li>
-            Run the source-only audit in an authorized isolated environment.
-          </li>
-          <li>
-            Approve reference creatinine, eligibility and result-availability
-            policies.
-          </li>
-          <li>Approve negative ascertainment and competing-event handling.</li>
-          <li>Freeze patient splits and common features before development.</li>
-          <li>
-            Evaluate a locked pipeline on genuinely separate, comparable data.
-          </li>
+          <li>Select an authored sample to inspect its computed creatinine stage and observed direction.</li>
+          <li>Download the same measurements as CSV or JSON.</li>
+          <li>Use Example Replay to reveal later lab results and corrections.</li>
         </ol>
+        <p>Stage and direction describe available measurements. A future progression forecast requires a separately trained and evaluated model. The public site accepts predefined synthetic cases only.</p>
         <p className="small">
           KDIGO 2012 creatinine arithmetic is tested on synthetic cases. Urine
           output and KRT require separate analyses. No clinical benefit is
@@ -403,6 +380,7 @@ export default function App() {
       });
     return () => controller.abort();
   }, [attempt]);
+  const hasEvaluation = data?.model.state === "ready" && data.model.metrics != null && Object.keys(data.model.metrics).length > 0;
   return (
     <>
       <a className="skip-link" href="#main">
@@ -421,14 +399,14 @@ export default function App() {
           </NavLink>
           <p className="nav-label">WORKSPACE</p>
           <nav aria-label="Main navigation">
-            <NavLink to="/assess">Patient Assessment</NavLink>
+            <NavLink to="/assess">{data?.model.public_demo ? "Sample Assessment" : "Patient Assessment"}</NavLink>
             <NavLink to="/clinical">Example Replay</NavLink>
-            <NavLink to="/research">Research Console</NavLink>
-            <NavLink to="/protocol">Clinical Protocol</NavLink>
+            {hasEvaluation && <NavLink to="/research">Research Console</NavLink>}
+            <NavLink to="/protocol">How it works</NavLink>
           </nav>
           <div className="sidebar-note">
             <span className="label">SOURCE BOUNDARY</span>
-            <p>Local research workbench</p>
+            <p>{data?.model.public_demo ? "Authored synthetic samples" : "Local research workbench"}</p>
             <small>All stages and outcomes come from the canonical API.</small>
           </div>
           <div className="sidebar-footer">
@@ -441,7 +419,7 @@ export default function App() {
               RENAL-GUARD{" "}
               <span className="breadcrumb">/ Progression research</span>
             </span>
-            <span className="pill">LOCAL PROTOTYPE</span>
+            <span className="pill">{data?.model.public_demo ? "PUBLIC SYNTHETIC DEMO" : "LOCAL PROTOTYPE"}</span>
           </header>
           <div className="research-banner">
             <strong>Research Prototype</strong>
@@ -454,8 +432,7 @@ export default function App() {
               <section className="card" role="alert">
                 <h1>Backend unavailable</h1>
                 <p>
-                  Start the local API with <code>make dev-backend</code>. No
-                  cached or invented results are displayed.
+                  The service could not be reached. Retry shortly; a hosted service may need time to start.
                 </p>
                 <Button
                   onClick={() => {
@@ -478,7 +455,7 @@ export default function App() {
                 <Routes>
                   <Route path="/assess" element={(data.model.public_demo ? <PublicSamples /> : <PatientUpload model={data.model} />)} />
                   <Route path="/clinical" element={<Explorer data={data} />} />
-                  <Route path="/research" element={<Research data={data} />} />
+                  <Route path="/research" element={hasEvaluation ? <Research data={data} /> : <Navigate to="/assess" replace />} />
                   <Route path="/protocol" element={<Protocol />} />
                   <Route
                     path="*"
@@ -490,7 +467,7 @@ export default function App() {
           </main>
           <footer className="footer">
             RENAL-GUARD{" "}
-            <span>48-hour progression · Clinical protocol pending review</span>
+            <span>Creatinine assessment · Research use only</span>
           </footer>
         </div>
       </div>

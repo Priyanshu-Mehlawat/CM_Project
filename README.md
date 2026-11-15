@@ -158,3 +158,15 @@ is claimed until Render confirms a successful deployment.
 Nine synthetic measurement cases can be downloaded as CSV or JSON from
 `/api/v1/samples/{name}/download?format=csv`; discover names at `/api/v1/samples`.
 These measurement files differ from the private index-level training feature CSV.
+
+
+## Current public workspace and MIMIC storage
+
+The public service is at https://renal-guard.onrender.com. Health and public mode
+were verified on 15 November 2026. The working workspace contains sample assessment,
+CSV/JSON downloads, observed measurement history, replay and usage explanations.
+Research Console is shown only when a ready model has actual evaluation metrics;
+the replay no longer contains an inactive prediction card.
+
+[Where to put MIMIC: local isolation, BigQuery and Colab considerations](docs/MIMIC_STORAGE.md).
+No MIMIC dataset or trained clinical model is hosted by the public app.

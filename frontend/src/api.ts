@@ -5,7 +5,6 @@ import type {
   EpisodeList,
   EpisodeView,
   Health,
-  ResearchStatus,
   SystemInfo,
 } from "./generated/contracts";
 export type { EpisodeView, ModelStatus, PatientAssessment };
@@ -14,7 +13,6 @@ export interface DemoState {
   health: Health;
   info: SystemInfo;
   cases: EpisodeList["episodes"];
-  research: ResearchStatus;
 }
 type Schema = {
   type?: string;
@@ -87,14 +85,13 @@ export async function getContract<T>(
   return data as T;
 }
 export async function loadDemo(signal: AbortSignal): Promise<DemoState> {
-  const [health, info, payload, research, model] = await Promise.all([
+  const [health, info, payload, model] = await Promise.all([
     getContract<Health>("health", "Health", signal),
     getContract<SystemInfo>("system/info", "SystemInfo", signal),
     getContract<EpisodeList>("episodes", "EpisodeList", signal),
-    getContract<ResearchStatus>("research/status", "ResearchStatus", signal),
     getContract<ModelStatus>("model/status", "ModelStatus", signal),
   ]);
-  return { health, info, cases: payload.episodes, research, model };
+  return { health, info, cases: payload.episodes, model };
 }
 export function loadEpisode(id: string, hour: number, signal: AbortSignal) {
   return getContract<EpisodeView>(
@@ -118,4 +115,10 @@ export async function importPatient(format: "json" | "csv", content: string, sig
   const schema: Schema = contractSchemas.PatientAssessment;
   if (!matches(data, schema, schema.$defs ?? {})) throw new Error("Incompatible assessment response");
   return data as PatientAssessment;
+}
+
+export function loadSample(id: string, signal: AbortSignal) {
+  return getContract<PatientAssessment>(
+    `samples/${encodeURIComponent(id)}/assessment`, "PatientAssessment", signal,
+  );
 }

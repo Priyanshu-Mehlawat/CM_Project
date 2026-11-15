@@ -42,7 +42,8 @@ test("connected contract selects a real backend fixture and replays future-only 
     screen.getByRole("heading", { name: "Observed progression to Stage 2/3" }),
   ).toBeVisible();
   expect(screen.getByText("2.1 mg/dL")).toBeVisible();
-  expect(screen.getAllByText("Model unavailable").length).toBeGreaterThan(0);
+  expect(screen.queryByText("Model unavailable")).not.toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /known samples/ })).toBeVisible();
 });
 test("corrected labs replace earlier abnormal values through the API", async () => {
   mockApi();
@@ -102,11 +103,8 @@ test("research and protocol pages show the pending gate without invented metrics
     </MemoryRouter>,
   );
   await screen.findByRole("button", { name: /Example A/ });
-  fireEvent.click(screen.getByRole("link", { name: "Research Console" }));
-  expect(
-    screen.getByRole("heading", { name: "Model training handoff" }),
-  ).toBeVisible();
-  fireEvent.click(screen.getByRole("link", { name: "Clinical Protocol" }));
+  expect(screen.queryByRole("link", { name: "Research Console" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("link", { name: "How it works" }));
   expect(
     screen.getByRole("heading", { name: "Clinical protocol" }),
   ).toBeVisible();

@@ -637,3 +637,6 @@ select { border: 1px solid #cad9e0; border-radius: 6px; padding: 9px; background
 .assessment-notes { padding-left: 18px; color: #526779; font-size: 13px; line-height: 1.8; }
 .upload-layout { align-items: start; }
 @media (max-width: 640px) { nav { flex-wrap: wrap; } }
+
+select { max-width: 100%; }
+textarea:focus-visible, select:focus-visible { outline: 3px solid #248d83; outline-offset: 3px; }
